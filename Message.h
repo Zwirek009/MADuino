@@ -1,20 +1,23 @@
 /// Project: MADuino
 /// Author: Maciej Wiraszka
-/// Version: v0.02 01.05.17 
+/// Version: v0.02 01.05.17
 ///
 /// MADuino - Arduino library for creating multi-agent systems based on Arduino boards.
 ///
-/// File: MADuino.h - heather file for class MADuino that represents a single agent 
+/// File: Message.cpp - heather file for class Message that represents a single message 
 ///
 
-#ifndef MADuino_h
-#define MADuino_h
+#ifndef Message_h
+#define Message_h
 
 #include "Arduino.h"
 
-class MADuino
+class Message
 {
+public:
 
+private:
+	
 };
 
 #endif
