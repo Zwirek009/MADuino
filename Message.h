@@ -21,6 +21,7 @@
 #include "RF24.h"
 #include "printf.h"
 
+// structure representing single Message, implements FIPA-ACL standard
 struct MessageStruct
 {
 	char performative[17];
@@ -35,12 +36,13 @@ struct MessageStruct
 	unsigned long conversation-id;
 };
 
+// class represending a single message
 class Message
 {
 public:
-	MessageStruct *contents;
-	RF24 *radio;
-	const uint64_t pipe_address;
+	MessageStruct *contents;		// holds "unJSONed" message 
+	RF24 *radio;					// represents the radio module
+	const uint64_t pipe_address;	// pipe where to send the message to
 
 	// send message constructors
 	Message(MessageStruct *cont, RF24 *rad, const uint64_t pipe_addr);	// standard
@@ -48,12 +50,14 @@ public:
 	// recceive message constructor
 	Message(StaticJsonBuffer<300> json_buff);
 
-	~Message();
+	// basic message destructor
+	~Message() {}
 
 private:
-	StaticJsonBuffer<300> json_buffer;
+	StaticJsonBuffer<300> json_buffer;	// for creating JSON purposes
 
-	boolean create__and_send_JSON();
+	boolean create_and_send_JSON();	// method that encapsulate MessageStruct data into a JSON
+									// and sends it using radio on pipe with pipe_address
 };
 
 #endif
