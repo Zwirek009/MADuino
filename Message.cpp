@@ -8,3 +8,41 @@
 ///
 
 #include "Message.h"
+
+Message::Message(MessageStruct *cont, RF24 *rad, const uint64_t pipe_addr)
+{
+	this.contents = cont;
+	this.radio = rad;
+	this.pipe_address = pipe_addr;
+}
+
+boolean Message::create_and_send_JSON()
+{
+	JsonArray& array = jsonBuffer.createArray();
+
+	array.add(contents->performative);
+	array.add(contents->sender);
+	array.add(contents->content);
+	// ...
+
+	char buffer[300];
+	array.printTo(buffer, sizeof(buffer));
+
+	radio->stopListening();
+
+	printf("Now sending...\t");
+	boolean ok = radio->write(&buffer, sizeof(buffer));
+
+	radio->continueListening();
+
+	if (ok)
+	{
+    	printf("Sent message.\n\r");
+    	return true;
+    }
+    else
+    {
+    	printf("Failed to send message.\n\r");
+    	return false;
+    }
+}

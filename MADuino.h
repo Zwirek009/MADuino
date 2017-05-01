@@ -11,6 +11,7 @@
 #define MADuino_h
 
 #include "Arduino.h"
+#include "Message.h"
 
 class MADuino
 {
