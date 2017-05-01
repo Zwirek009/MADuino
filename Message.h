@@ -17,7 +17,17 @@ class Message
 public:
 
 private:
-	
+	// to be stored in Message JSON
+	char performative[17];
+	unsigned long sender;
+	char content[100];
+	unsigned long reply-with;	// message ID
+	unsigned long reply-by;
+	unsigned long in-reply-to;
+	char language[10];
+	char ontology[10];
+	char protocol[10];
+	unsigned long conversation-id
 };
 
 #endif
