@@ -7,13 +7,15 @@
 /// File: Message.cpp - heather file for class Message that represents a single message 
 ///
 
-#ifndef Message_h
-#define Message_h
+#ifndef MESSAGE_H
+#define MESSAGE_H
 
 #include "Arduino.h"
 
 // JSON parser
 #include <ArduinoJson.h>
+
+//#include "printf.h"
 
 // send device specified
 #include <SPI.h>

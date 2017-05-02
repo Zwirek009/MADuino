@@ -31,22 +31,22 @@ boolean Message::createAndSendJSON()
 	array.printTo(buffer, sizeof(buffer));
 
 	radio->stopListening();
-	Serial.print("Now sending...\t");
-	//printf("Now sending...\t");
+	//Serial.print("Now sending...\t");
+	printf("Now sending...\t");
 	boolean ok = radio->write(&buffer, sizeof(buffer));
 
 	radio->startListening();
 
 	if (ok)
 	{
-		Serial.println("Sent message.");
-    	//printf("Sent message.\n\r");
+		//Serial.println("Sent message.");
+    	printf("Sent message.\n\r");
     	return true;
     }
     else
     {
-    	Serial.println("Failed to send message.");
-    	//printf("Failed to send message.\n\r");
+    	//Serial.println("Failed to send message.");
+    	printf("Failed to send message.\n\r");
     	return false;
     }
 }

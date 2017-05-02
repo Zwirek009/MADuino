@@ -7,11 +7,12 @@
 /// File: MADuino.h - heather file for class MADuino that represents a single agent 
 ///
 
-#ifndef MADuino_h
-#define MADuino_h
+#ifndef MADUINO_H
+#define MADUINO_H
 
 #include "Arduino.h"
 #include "Message.h"
+//#include <printf.h>
 //#include <Time.h>
 
 // send device specified
@@ -39,6 +40,8 @@ public:
 
 	void runMaster();	// methods specifying specyfic role agents in Arduino loop()
 	void runSlave();	//
+
+	void agentSetup();
 
 	boolean sendMessage();	// create and send message, using Message library
 private:

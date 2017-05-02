@@ -13,18 +13,23 @@ MADuino::MADuino(unsigned long agentId, int r, const uint64_t listenAddr, const 
 	: pipeListen(listenAddr), pipeSend(sendAddr)
 {
 	// prepaire LED for signalizing message send or receive
-	pinMode(LED_BUILTIN, OUTPUT);
-	digitalWrite(LED_BUILTIN, LOW);
+	//pinMode(LED_BUILTIN, OUTPUT);
+	//digitalWrite(LED_BUILTIN, HIGH);
 
 	id = agentId; // to change into actual time in milis since 1970
 	agentRole = r;
 
+}
+
+void MADuino::agentSetup()
+{
 	radio = new RF24(9,10);
 
-	Serial.begin(57600);
-	Serial.print("Agent started --> role: ");
-	Serial.println("Master");
-  	//printf("Agent started --> role: %s\n\n", roleName[agentRole]);
+	//Serial.begin(57600);
+	//Serial.print("Agent started --> role: ");
+	//Serial.println("Master");
+	//printf_begin();
+  	printf("Agent started --> role: Master\n\n");
 
   	radio->begin();
 
@@ -48,11 +53,11 @@ void MADuino::runMaster()
 	messageToBeSent->conversationId = (id+(nxtConversationNr++));
 
 	// send prepaired request message
-	digitalWrite(LED_BUILTIN, HIGH);
-	Serial.println("Sending request for lightning up...");
-	//printf("Sending request for lightning up...\n");
+	//digitalWrite(LED_BUILTIN, HIGH);
+	//Serial.println("Sending request for lightning up...");
+	printf("Sending request for lightning up...\n");
 	sendMessage();
-	digitalWrite(LED_BUILTIN, LOW);
+	//digitalWrite(LED_BUILTIN, LOW);
 
 	delete messageToBeSent;
 	delay(3000);
