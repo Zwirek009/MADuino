@@ -10,10 +10,12 @@
 #include "Message.h"
 
 Message::Message(MessageStruct *cont, RF24 *rad, const uint64_t pipeAddr)
+	: pipeAddress(pipeAddr)
 {
-	this.contents = cont;
-	this.radio = rad;
-	this.pipeAddress = pipeAddr;
+	contents = cont;
+	radio = rad;
+
+	radio->setPayloadSize(300);
 }
 
 boolean Message::createAndSendJSON()
@@ -29,20 +31,22 @@ boolean Message::createAndSendJSON()
 	array.printTo(buffer, sizeof(buffer));
 
 	radio->stopListening();
-
-	printf("Now sending...\t");
+	Serial.print("Now sending...\t");
+	//printf("Now sending...\t");
 	boolean ok = radio->write(&buffer, sizeof(buffer));
 
-	radio->continueListening();
+	radio->startListening();
 
 	if (ok)
 	{
-    	printf("Sent message.\n\r");
+		Serial.println("Sent message.");
+    	//printf("Sent message.\n\r");
     	return true;
     }
     else
     {
-    	printf("Failed to send message.\n\r");
+    	Serial.println("Failed to send message.");
+    	//printf("Failed to send message.\n\r");
     	return false;
     }
 }

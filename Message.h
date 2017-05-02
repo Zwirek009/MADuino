@@ -19,14 +19,13 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
-//#include <printf.h>
 
 // structure representing single Message, implements FIPA-ACL standard
 struct MessageStruct
 {
-	char performative[17];
+	char *performative;
 	unsigned long sender;
-	char content[100];
+	char *content;
 	unsigned long replyWith;	// message ID
 	unsigned long replyBy;
 	unsigned long inReplyTo;
@@ -53,11 +52,11 @@ public:
 	// basic message destructor
 	~Message() {}
 
-private:
-	StaticJsonBuffer<300> jsonBuffer;	// for creating JSON purposes
-
 	boolean createAndSendJSON();	// method that encapsulate MessageStruct data into a JSON
 									// and sends it using radio on pipe with pipe_address
+
+private:
+	StaticJsonBuffer<300> jsonBuffer;	// for creating JSON purposes
 };
 
 #endif

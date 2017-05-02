@@ -12,17 +12,16 @@
 
 #include "Arduino.h"
 #include "Message.h"
-#include <Time.h>
+//#include <Time.h>
 
 // send device specified
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
-//#include <printf.h>
 
 // possible agent's roles
-typedef enum { master = 1, slave } role;
-const char *roleName[] = {"invalid", "Master", "Slave"};
+//typedef enum { master = 1, slave } role;
+//const char *roleName[] = {"invalid", "Master", "Slave"};
 
 // class representing a single agent
 class MADuino
@@ -34,7 +33,7 @@ public:
 	//unsigned long get_nxt_conversation_nr();
 	//unsigned long get_nxt_message_nr();
 
-	MADuino(role r, const uint64_t listenAddr, const uint64_t sendAddr);	// basic constructor
+	MADuino(unsigned long agentId, int r, const uint64_t listenAddr, const uint64_t sendAddr);	// basic constructor
 
 	~MADuino() {}	// basic destructor
 
@@ -43,7 +42,7 @@ public:
 
 	boolean sendMessage();	// create and send message, using Message library
 private:
-	role agent_role;
+	int agentRole;
 	unsigned long id;		// unique agent ID --> compilation time footprint in seconds since 1 Jan 1970
 
 	unsigned long nxtConversationNr = 1;	// conversation and message IDs are created as

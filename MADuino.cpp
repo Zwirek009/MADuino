@@ -9,48 +9,52 @@
 
 #include "MADuino.h"
 
-MADuino::MADuino(role r, const uint64_t listenAddr, const uint64_t sendAddr)
+MADuino::MADuino(unsigned long agentId, int r, const uint64_t listenAddr, const uint64_t sendAddr) 
+	: pipeListen(listenAddr), pipeSend(sendAddr)
 {
 	// prepaire LED for signalizing message send or receive
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, LOW);
 
-	id = now(); // actual time in milis since 1970
+	id = agentId; // to change into actual time in milis since 1970
 	agentRole = r;
-	pipeListen = listenAddr;
-	pipeSend = sendAddr;
 
 	radio = new RF24(9,10);
 
 	Serial.begin(57600);
-  	printf_begin();
-  	printf("Agent started --> role: %s\n\n", roleName[agentRole]);
+	Serial.print("Agent started --> role: ");
+	Serial.println("Master");
+  	//printf("Agent started --> role: %s\n\n", roleName[agentRole]);
 
-  	radio.begin();
+  	radio->begin();
 
-  	radio.openWritingPipe(pipeSend);
-  	radio.openReadingPipe(pipeListen);
+  	radio->openWritingPipe(pipeSend);
+  	radio->openReadingPipe(1, pipeListen);
 
-  	radio.startListening();
-  	radio.printDetails();
+  	radio->startListening();
+  	radio->printDetails();
 }
 
 void MADuino::runMaster()
 {
 	// create request for lightning message
 	messageToBeSent = new MessageStruct();
-	messageToBeSent->performative = "Request\0";
+	char request[] = "Request";
+	messageToBeSent->performative = request;
 	messageToBeSent->sender = id;
-	messageToBeSent->content = "Light up one diod\0";
+	char content[] = "Light up one diod";
+	messageToBeSent->content = content;
 	messageToBeSent->replyWith = (id+(nxtMessageNr++));
 	messageToBeSent->conversationId = (id+(nxtConversationNr++));
 
 	// send prepaired request message
 	digitalWrite(LED_BUILTIN, HIGH);
-	printf("Sending request for lightning up...\n");
+	Serial.println("Sending request for lightning up...");
+	//printf("Sending request for lightning up...\n");
 	sendMessage();
 	digitalWrite(LED_BUILTIN, LOW);
 
+	delete messageToBeSent;
 	delay(3000);
 }
 
@@ -61,8 +65,8 @@ void MADuino::runSlave()
 
 boolean MADuino::sendMessage()
 {
-	Message mess = new Message(messageToBeSent, radio, pipeSend);
-	mess.createAndSendJSON();
+	Message *mess = new Message(messageToBeSent, radio, pipeSend);
+	mess->createAndSendJSON();
 	delete mess;
 }
 
