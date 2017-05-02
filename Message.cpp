@@ -9,14 +9,14 @@
 
 #include "Message.h"
 
-Message::Message(MessageStruct *cont, RF24 *rad, const uint64_t pipe_addr)
+Message::Message(MessageStruct *cont, RF24 *rad, const uint64_t pipeAddr)
 {
 	this.contents = cont;
 	this.radio = rad;
-	this.pipe_address = pipe_addr;
+	this.pipe_address = pipeAddr;
 }
 
-boolean Message::create_and_send_JSON()
+boolean Message::createAndSendJSON()
 {
 	JsonArray& array = jsonBuffer.createArray();
 

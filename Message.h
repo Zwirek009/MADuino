@@ -42,21 +42,21 @@ class Message
 public:
 	MessageStruct *contents;		// holds "unJSONed" message 
 	RF24 *radio;					// represents the radio module
-	const uint64_t pipe_address;	// pipe where to send the message to
+	const uint64_t pipeAddress;	// pipe where to send the message to
 
 	// send message constructors
-	Message(MessageStruct *cont, RF24 *rad, const uint64_t pipe_addr);	// standard
+	Message(MessageStruct *cont, RF24 *rad, const uint64_t pipeAddr);	// standard
 
 	// recceive message constructor
-	Message(StaticJsonBuffer<300> json_buff);
+	Message(StaticJsonBuffer<300> jsonBuff);
 
 	// basic message destructor
 	~Message() {}
 
 private:
-	StaticJsonBuffer<300> json_buffer;	// for creating JSON purposes
+	StaticJsonBuffer<300> jsonBuffer;	// for creating JSON purposes
 
-	boolean create_and_send_JSON();	// method that encapsulate MessageStruct data into a JSON
+	boolean createAndSendJSON();	// method that encapsulate MessageStruct data into a JSON
 									// and sends it using radio on pipe with pipe_address
 };
 
