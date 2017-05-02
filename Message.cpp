@@ -1,6 +1,6 @@
 /// Project: MADuino
 /// Author: Maciej Wiraszka
-/// Version: v0.02 01.05.17
+/// Version: v0.02 02.05.17
 ///
 /// MADuino - Arduino library for creating multi-agent systems based on Arduino boards.
 ///
@@ -13,7 +13,7 @@ Message::Message(MessageStruct *cont, RF24 *rad, const uint64_t pipeAddr)
 {
 	this.contents = cont;
 	this.radio = rad;
-	this.pipe_address = pipeAddr;
+	this.pipeAddress = pipeAddr;
 }
 
 boolean Message::createAndSendJSON()

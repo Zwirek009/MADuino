@@ -1,6 +1,6 @@
 /// Project: MADuino
 /// Author: Maciej Wiraszka
-/// Version: v0.02 01.05.17 
+/// Version: v0.02 02.05.17 
 ///
 /// MADuino - Arduino library for creating multi-agent systems based on Arduino boards.
 ///
@@ -16,9 +16,9 @@
 
 // send device specified
 #include <SPI.h>
-#include "nRF24L01.h"
-#include "RF24.h"
-#include "printf.h"
+#include <nRF24L01.h>
+#include <RF24.h>
+//#include <printf.h>
 
 // possible agent's roles
 typedef enum { master = 1, slave } role;

@@ -1,6 +1,6 @@
 /// Project: MADuino
 /// Author: Maciej Wiraszka
-/// Version: v0.02 01.05.17
+/// Version: v0.02 02.05.17
 ///
 /// MADuino - Arduino library for creating multi-agent systems based on Arduino boards.
 ///
@@ -17,9 +17,9 @@
 
 // send device specified
 #include <SPI.h>
-#include "nRF24L01.h"
-#include "RF24.h"
-#include "printf.h"
+#include <nRF24L01.h>
+#include <RF24.h>
+//#include <printf.h>
 
 // structure representing single Message, implements FIPA-ACL standard
 struct MessageStruct
@@ -27,13 +27,13 @@ struct MessageStruct
 	char performative[17];
 	unsigned long sender;
 	char content[100];
-	unsigned long reply-with;	// message ID
-	unsigned long reply-by;
-	unsigned long in-reply-to;
+	unsigned long replyWith;	// message ID
+	unsigned long replyBy;
+	unsigned long inReplyTo;
 	char language[10];
 	char ontology[10];
 	char protocol[10];
-	unsigned long conversation-id;
+	unsigned long conversationId;
 };
 
 // class represending a single message

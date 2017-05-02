@@ -1,6 +1,6 @@
 /// Project: MADuino
 /// Author: Maciej Wiraszka
-/// Version: v0.02 01.05.17 
+/// Version: v0.02 02.05.17 
 ///
 /// MADuino - Arduino library for creating multi-agent systems based on Arduino boards.
 ///
@@ -42,8 +42,8 @@ void MADuino::runMaster()
 	messageToBeSent->performative = "Request\0";
 	messageToBeSent->sender = id;
 	messageToBeSent->content = "Light up one diod\0";
-	messageToBeSent->reply-with = (id+(nxtMessageNr++));
-	messageToBeSent->conversation-id = (id+(nxtConversationNr++));
+	messageToBeSent->replyWith = (id+(nxtMessageNr++));
+	messageToBeSent->conversationId = (id+(nxtConversationNr++));
 
 	// send prepaired request message
 	digitalWrite(LED_BUILTIN, HIGH);
