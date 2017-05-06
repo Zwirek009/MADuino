@@ -21,7 +21,7 @@ MADuino::MADuino(unsigned long agentId, int r, const uint64_t listenAddr, const 
 
 }
 
-void MADuino::agentSetup()
+void MADuino::masterSetup()
 {
 	radio = new RF24(9,10);
 
@@ -34,10 +34,16 @@ void MADuino::agentSetup()
   	radio->begin();
 
   	radio->openWritingPipe(pipeSend);
+  	radio->setAutoAck(pipeSend, false);
   	radio->openReadingPipe(1, pipeListen);
 
   	radio->startListening();
   	radio->printDetails();
+}
+
+void MADuino::slaveSetup()
+{
+	// TODO implementation
 }
 
 void MADuino::runMaster()

@@ -41,7 +41,8 @@ public:
 	void runMaster();	// methods specifying specyfic role agents in Arduino loop()
 	void runSlave();	//
 
-	void agentSetup();
+	void masterSetup();
+	void slaveSetup();
 
 	boolean sendMessage();	// create and send message, using Message library
 private:

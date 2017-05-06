@@ -9,7 +9,7 @@ void setup() {
 	//Serial.print("Agent started --> role: ");
 	//Serial.println("Master");
 	printf_begin();
-	agent.agentSetup();
+	agent.masterSetup();
 }
 
 void loop() {
