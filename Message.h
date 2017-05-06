@@ -49,7 +49,7 @@ public:
 	Message(MessageStruct *cont, RF24 *rad, const uint64_t pipeAddr);	// standard
 
 	// recceive message constructor
-	Message(StaticJsonBuffer<300> jsonBuff);
+	Message(char * buffer);
 
 	// basic message destructor
 	~Message() {}

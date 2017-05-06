@@ -18,6 +18,23 @@ Message::Message(MessageStruct *cont, RF24 *rad, const uint64_t pipeAddr)
 	//radio->setPayloadSize(300);
 }
 
+Message::Message(char *buffer)
+{
+	contents = new MessageStruct();
+
+	JsonArray& root = jsonBuffer.parseArray(buffer);
+	if (!root.success())
+	{
+  		Serial.println("parseArray() failed");
+	}
+
+	// retrive the values
+	contents->performative = root[0];
+	contents->sender = root[1];
+	contents->content = root[2];
+	//...
+}
+
 boolean Message::createAndSendJSON()
 {
 	JsonArray& array = jsonBuffer.createArray();
@@ -29,6 +46,7 @@ boolean Message::createAndSendJSON()
 
 	char buffer[300];
 	array.printTo(buffer, sizeof(buffer));
+	Serial.println(buffer);
 
 	radio->stopListening();
 	Serial.print("Now sending...\t");

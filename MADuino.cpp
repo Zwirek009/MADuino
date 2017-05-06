@@ -58,7 +58,7 @@ void MADuino::runMaster()
 	char request[] = "Request";
 	messageToBeSent->performative = request;
 	messageToBeSent->sender = id;
-	char content[] = "Light up one diod";
+	char content[] = "Light up";
 	messageToBeSent->content = content;
 	messageToBeSent->replyWith = (id+(nxtMessageNr++));
 	messageToBeSent->conversationId = (id+(nxtConversationNr++));
@@ -93,9 +93,15 @@ void MADuino::runSlave()
 			delay(20);
       	}
       	digitalWrite(LED_BUILTIN, LOW);
-      	Serial.println(buffer);
 
-      	Serial.println("Got payload...");
+      	Message *mess = new Message(buffer);
+      	Serial.println(mess->contents->performative);
+      	Serial.println(mess->contents->sender);
+      	Serial.println(mess->contents->content);
+      	Serial.println();
+      	delete mess;
+
+      	//Serial.println(buffer);
   	}
 }
 
