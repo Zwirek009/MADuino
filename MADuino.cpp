@@ -84,7 +84,6 @@ void MADuino::runSlave()
       	bool done = false;
 
       	//bool msg;
-		char buffer[300];
 
       	while (!done)
       	{

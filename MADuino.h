@@ -50,6 +50,8 @@ private:
 	bool slaveLedState;
 	unsigned long id;		// unique agent ID --> compilation time footprint in seconds since 1 Jan 1970
 
+	char buffer[300];
+	
 	unsigned long nxtConversationNr;	// conversation and message IDs are created as
 	unsigned long nxtMessageNr;			// id + nxt_conversation/message_nr
 
