@@ -44,7 +44,7 @@ void MADuino::slaveSetup()
 
 	// prepaire LED for signalizing message send or receive
 	pinMode(7, OUTPUT);
-	
+
 	printf("Agent started --> role: Slave\n\n");
 
 	radio->begin();
@@ -101,8 +101,8 @@ void MADuino::runSlave()
       	Serial.println(mess->contents->content);
       	Serial.println();
 
-      	//if(mess->contents->content == "Light up")
-      	//{
+      	if(mess->contents->sender == 1)
+      	{
       		if (slaveLedState == true)
       		{
       			digitalWrite(7, LOW);
@@ -113,7 +113,7 @@ void MADuino::runSlave()
       			digitalWrite(7, HIGH);
       			slaveLedState = true;
       		}
-      	//}
+      	}
       	delete mess;
 
       	//Serial.println(buffer);
