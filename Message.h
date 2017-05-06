@@ -52,7 +52,7 @@ public:
 	Message(char * buffer);
 
 	// basic message destructor
-	~Message() {}
+	~Message();
 
 	boolean createAndSendJSON();	// method that encapsulate MessageStruct data into a JSON
 									// and sends it using radio on pipe with pipe_address

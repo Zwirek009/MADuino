@@ -35,6 +35,11 @@ Message::Message(char *buffer)
 	//...
 }
 
+Message::~Message()
+{
+	delete contents;
+}
+
 boolean Message::createAndSendJSON()
 {
 	JsonArray& array = jsonBuffer.createArray();
