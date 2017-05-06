@@ -15,7 +15,7 @@ Message::Message(MessageStruct *cont, RF24 *rad, const uint64_t pipeAddr)
 	contents = cont;
 	radio = rad;
 
-	radio->setPayloadSize(300);
+	//radio->setPayloadSize(300);
 }
 
 boolean Message::createAndSendJSON()
@@ -31,22 +31,24 @@ boolean Message::createAndSendJSON()
 	array.printTo(buffer, sizeof(buffer));
 
 	radio->stopListening();
-	//Serial.print("Now sending...\t");
-	printf("Now sending...\t");
+	Serial.print("Now sending...\t");
 	boolean ok = radio->write(&buffer, sizeof(buffer));
+
+	//bool msg = true;
+	//bool ok = radio->write(&msg, sizeof(bool));
 
 	radio->startListening();
 
 	if (ok)
 	{
-		//Serial.println("Sent message.");
-    	printf("Sent message.\n\r");
+		Serial.println("Sent message.");
+		Serial.println();
     	return true;
     }
     else
     {
-    	//Serial.println("Failed to send message.");
-    	printf("Failed to send message.\n\r");
+    	Serial.println("Failed to send message.");
+    	Serial.println();
     	return false;
     }
 }

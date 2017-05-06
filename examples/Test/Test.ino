@@ -1,7 +1,8 @@
 #include <MADuino.h>
 #include "printf.h"
 
-MADuino agent(1, 1, 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL);
+MADuino master(1, 1, 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL);
+//MADuino slave(2, 2, 0xF0F0F0F0D2LL, 0xF0F0F0F0E1LL);
 
 void setup() {
   // put your setup code here, to run once:
@@ -9,10 +10,13 @@ void setup() {
 	//Serial.print("Agent started --> role: ");
 	//Serial.println("Master");
 	printf_begin();
-	agent.masterSetup();
+
+	master.masterSetup();
+	//slave.slaveSetup();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  agent.runMaster();
+  master.runMaster();
+  //slave.runSlave();
 }
