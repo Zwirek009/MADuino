@@ -12,13 +12,13 @@
 MADuino::MADuino(unsigned long agentId, int r, const uint64_t listenAddr, const uint64_t sendAddr) 
 	: pipeListen(listenAddr), pipeSend(sendAddr)
 {
-	// prepaire LED for signalizing message send or receive
-	pinMode(LED_BUILTIN, OUTPUT);
-	digitalWrite(LED_BUILTIN, HIGH);
 
 	id = agentId; // to change into actual time in milis since 1970
 	agentRole = r;
 
+	nxtConversationNr = 1;
+	nxtMessageNr = 1;
+	slaveLedState = false;
 }
 
 void MADuino::masterSetup()
@@ -42,6 +42,9 @@ void MADuino::slaveSetup()
 {
 	radio = new RF24(9,10);
 
+	// prepaire LED for signalizing message send or receive
+	pinMode(7, OUTPUT);
+	
 	printf("Agent started --> role: Slave\n\n");
 
 	radio->begin();
@@ -64,10 +67,8 @@ void MADuino::runMaster()
 	messageToBeSent->conversationId = (id+(nxtConversationNr++));
 
 	// send prepaired request message
-	digitalWrite(LED_BUILTIN, HIGH);
 	Serial.println("Sending request for lightning up...");
 	sendMessage();
-	digitalWrite(LED_BUILTIN, LOW);
 
 	delete messageToBeSent;
 	delay(3000);
@@ -78,12 +79,13 @@ void MADuino::runSlave()
 	if ( radio->available() )
     {
     	Serial.println("Cos zlapalem");
+    	Serial.println();
+
       	bool done = false;
 
       	//bool msg;
 		char buffer[300];
 
-      	digitalWrite(LED_BUILTIN, HIGH);
       	while (!done)
       	{
         	// Fetch the payload, and see if this was the last one.
@@ -92,13 +94,26 @@ void MADuino::runSlave()
 
 			delay(20);
       	}
-      	digitalWrite(LED_BUILTIN, LOW);
 
       	Message *mess = new Message(buffer);
       	Serial.println(mess->contents->performative);
       	Serial.println(mess->contents->sender);
       	Serial.println(mess->contents->content);
       	Serial.println();
+
+      	//if(mess->contents->content == "Light up")
+      	//{
+      		if (slaveLedState == true)
+      		{
+      			digitalWrite(7, LOW);
+      			slaveLedState = false;
+      		}
+      		else
+      		{
+      			digitalWrite(7, HIGH);
+      			slaveLedState = true;
+      		}
+      	//}
       	delete mess;
 
       	//Serial.println(buffer);

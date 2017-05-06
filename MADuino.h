@@ -47,10 +47,11 @@ public:
 	boolean sendMessage();	// create and send message, using Message library
 private:
 	int agentRole;
+	bool slaveLedState;
 	unsigned long id;		// unique agent ID --> compilation time footprint in seconds since 1 Jan 1970
 
-	unsigned long nxtConversationNr = 1;	// conversation and message IDs are created as
-	unsigned long nxtMessageNr = 1;			// id + nxt_conversation/message_nr
+	unsigned long nxtConversationNr;	// conversation and message IDs are created as
+	unsigned long nxtMessageNr;			// id + nxt_conversation/message_nr
 
 	MessageStruct *messageToBeSent;		// using Message library
 	MessageStruct *messageReceived;		//
