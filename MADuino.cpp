@@ -70,7 +70,6 @@ void MADuino::runMaster()
 	Serial.println("Sending request for lightning up...");
 	sendMessage();
 
-	delete messageToBeSent;
 	delay(3000);
 }
 
