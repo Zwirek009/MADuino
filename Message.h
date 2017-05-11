@@ -26,10 +26,10 @@
 struct MessageStruct
 {
 	char *performative;
-	unsigned long sender;
+	unsigned long sender; // zamien na np MAC i prefix
 	char *content;
 	unsigned long replyWith;	// message ID
-	unsigned long replyBy;
+	unsigned long replyBy;		// zamien te trzy na stringi
 	unsigned long inReplyTo;
 	char language[10];
 	char ontology[10];
