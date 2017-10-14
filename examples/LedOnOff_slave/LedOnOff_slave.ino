@@ -27,8 +27,8 @@ void loop() {
       	while (!done)
       	{
         	// Fetch the payload, and see if this was the last one.
-        	//done = radio->read(&msg, sizeof(bool));
-      		done = radio->read(&(slave.buffer), sizeof(slave.buffer));
+        	//done = slave.radio->read(&msg, sizeof(bool));
+      		done = slave.radio->read(&(slave.buffer), sizeof(slave.buffer));
           delay(20);
       	}
 
