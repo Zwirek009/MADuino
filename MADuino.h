@@ -33,7 +33,7 @@ public:
 	//unsigned long get_nxt_conversation_nr();
 	//unsigned long get_nxt_message_nr();
 
-	MADuino(unsigned long agentId, int r, const uint64_t listenAddr, const uint64_t sendAddr);	// basic constructor
+	MADuino(unsigned long agentId, const uint64_t listenAddr, const uint64_t sendAddr);	// basic constructor
 
 	~MADuino() {}	// basic destructor
 
@@ -45,7 +45,6 @@ public:
 
 	boolean sendMessage();	// create and send message, using Message library
 private:
-	int agentRole;			// for testing purposes --> led on-off
 	bool slaveLedState;		//
 
 	unsigned long id;		// unique agent ID --> change into GUID ?

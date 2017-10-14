@@ -8,12 +8,11 @@
 
 #include "MADuino.h"
 
-MADuino::MADuino(unsigned long agentId, int r, const uint64_t listenAddr, const uint64_t sendAddr) 
+MADuino::MADuino(unsigned long agentId, const uint64_t listenAddr, const uint64_t sendAddr) 
 	: pipeListen(listenAddr), pipeSend(sendAddr)
 {
 
 	id = agentId; // to change into GUID ?
-	agentRole = r;			// for testing purposes --> led on-off
 
 	nxtConversationNr = 1;
 	nxtMessageNr = 1;
