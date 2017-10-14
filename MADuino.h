@@ -11,8 +11,6 @@
 
 #include "Arduino.h"
 #include "Message.h"
-//#include <printf.h>
-//#include <Time.h>
 
 // send device specified
 #include <SPI.h>
@@ -37,15 +35,8 @@ public:
 
 	~MADuino() {}	// basic destructor
 
-	void runMaster();		// for testing purposes --> led on-off
-	void runSlave();		// methods specifying specyfic role agents
-							//
-	void masterSetup();		//
-	void slaveSetup();		//
-
+	void agentSetup();
 	boolean sendMessage();	// create and send message, using Message library
-private:
-	bool slaveLedState;		//
 
 	unsigned long id;		// unique agent ID --> change into GUID ?
 

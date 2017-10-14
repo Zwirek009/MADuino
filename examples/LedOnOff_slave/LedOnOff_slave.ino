@@ -1,18 +1,58 @@
 #include <MADuino.h>
-#include "printf.h"
 
 MADuino slave(2, 0xF0F0F0F0D2LL, 0xF0F0F0F0E1LL);
 
-void setup() {
-  // put your setup code here, to run once:
-  	Serial.begin(57600);
-	printf_begin();
+bool slaveLedState = false;
 
-	slave.slaveSetup();
+void setup() {
+  slave.agentSetup();
+
+	// prepaire LED for signalizing message send or receive
+  pinMode(7, OUTPUT);
+  
+  Serial.println("Agent started --> role: Slave");
+  Serial.println();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  //master.runMaster();
-  slave.runSlave();
+  if ( slave.radio->available() )
+    {
+    	Serial.println("Cos zlapalem");
+    	Serial.println();
+
+      	bool done = false;
+
+      	//bool msg;
+
+      	while (!done)
+      	{
+        	// Fetch the payload, and see if this was the last one.
+        	//done = radio->read(&msg, sizeof(bool));
+      		done = radio->read(&(slave.buffer), sizeof(slave.buffer));
+          delay(20);
+      	}
+
+      	Message *mess = new Message(slave.buffer);
+      	Serial.println(mess->contents->performative);
+      	Serial.println(mess->contents->sender);
+        Serial.println(mess->contents->content);
+        Serial.println(slave.buffer);
+      	Serial.println();
+
+      	if(mess->contents->sender != 0)
+      	{
+      		if (slaveLedState == true)
+      		{
+      			digitalWrite(7, LOW);
+      			slaveLedState = false;
+      		}
+      		else
+      		{
+      			digitalWrite(7, HIGH);
+      			slaveLedState = true;
+      		}
+		  }
+
+      	delete mess;
+  	}
 }

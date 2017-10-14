@@ -14,8 +14,6 @@
 // JSON parser
 #include <ArduinoJson.h>
 
-//#include "printf.h"
-
 // send device specified
 #include <SPI.h>
 #include <nRF24L01.h>
