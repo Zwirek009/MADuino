@@ -61,7 +61,7 @@ void MADuino::runMaster()
 	char request[] = "Request";
 	messageToBeSent->performative = request;
 	messageToBeSent->sender = id;
-	char content[] = "Light up";
+	char content[] = "Light down";
 	messageToBeSent->content = content;
 	messageToBeSent->replyWith = (id+(nxtMessageNr++));
 	messageToBeSent->conversationId = (id+(nxtConversationNr++));
@@ -99,7 +99,7 @@ void MADuino::runSlave()
       	Serial.println(mess->contents->content);
       	Serial.println();
 
-      	if(mess->contents->sender == 1)
+      	if(mess->contents->sender == 3)
       	{
       		if (slaveLedState == true)
       		{
@@ -111,7 +111,15 @@ void MADuino::runSlave()
       			digitalWrite(7, HIGH);
       			slaveLedState = true;
       		}
-      	}
+		  }
+		else if(mess->contents->sender == 1)
+		{
+			if (slaveLedState == true)
+			{
+				digitalWrite(7, LOW);
+				slaveLedState = false;
+			}
+		}
       	delete mess;
 
       	//Serial.println(buffer);
