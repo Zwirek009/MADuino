@@ -1,6 +1,5 @@
 /// Project: MADuino
 /// Author: Maciej Wiraszka
-/// Version: v0.02 02.05.17 
 ///
 /// MADuino - Arduino library for creating multi-agent systems based on Arduino boards.
 ///
@@ -13,15 +12,15 @@ MADuino::MADuino(unsigned long agentId, int r, const uint64_t listenAddr, const 
 	: pipeListen(listenAddr), pipeSend(sendAddr)
 {
 
-	id = agentId; // to change into actual time in milis since 1970
-	agentRole = r;
+	id = agentId; // to change into GUID ?
+	agentRole = r;			// for testing purposes --> led on-off
 
 	nxtConversationNr = 1;
 	nxtMessageNr = 1;
-	slaveLedState = false;
+	slaveLedState = false; 	// for testing purposes --> led on-off
 }
 
-void MADuino::masterSetup()
+void MADuino::masterSetup() // only for testing purposes --> led on-off
 {
 	radio = new RF24(9,10);
 
@@ -38,7 +37,7 @@ void MADuino::masterSetup()
   	radio->printDetails();
 }
 
-void MADuino::slaveSetup()
+void MADuino::slaveSetup() // only for testing purposes --> led on-off
 {
 	radio = new RF24(9,10);
 
@@ -54,7 +53,7 @@ void MADuino::slaveSetup()
   	radio->startListening();
   	radio->printDetails();
 }
-void MADuino::runMaster()
+void MADuino::runMaster() // only for testing purposes --> led on-off
 {
 	// create request for lightning message
 	messageToBeSent = new MessageStruct();
@@ -73,7 +72,7 @@ void MADuino::runMaster()
 	delay(3000);
 }
 
-void MADuino::runSlave()
+void MADuino::runSlave() // only for testing purposes --> led on-off
 {
 	if ( radio->available() )
     {
@@ -99,7 +98,7 @@ void MADuino::runSlave()
       	Serial.println(mess->contents->content);
       	Serial.println();
 
-      	if(mess->contents->sender == 3)
+      	if(mess->contents->sender != 0)
       	{
       		if (slaveLedState == true)
       		{
@@ -112,14 +111,7 @@ void MADuino::runSlave()
       			slaveLedState = true;
       		}
 		  }
-		else if(mess->contents->sender == 1)
-		{
-			if (slaveLedState == true)
-			{
-				digitalWrite(7, LOW);
-				slaveLedState = false;
-			}
-		}
+
       	delete mess;
 
       	//Serial.println(buffer);

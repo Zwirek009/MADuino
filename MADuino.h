@@ -1,6 +1,5 @@
 /// Project: MADuino
 /// Author: Maciej Wiraszka
-/// Version: v0.02 02.05.17 
 ///
 /// MADuino - Arduino library for creating multi-agent systems based on Arduino boards.
 ///
@@ -38,17 +37,18 @@ public:
 
 	~MADuino() {}	// basic destructor
 
-	void runMaster();	// methods specifying specyfic role agents in Arduino loop()
-	void runSlave();	//
-
-	void masterSetup();
-	void slaveSetup();
+	void runMaster();		// for testing purposes --> led on-off
+	void runSlave();		// methods specifying specyfic role agents
+							//
+	void masterSetup();		//
+	void slaveSetup();		//
 
 	boolean sendMessage();	// create and send message, using Message library
 private:
-	int agentRole;
-	bool slaveLedState;
-	unsigned long id;		// unique agent ID --> compilation time footprint in seconds since 1 Jan 1970
+	int agentRole;			// for testing purposes --> led on-off
+	bool slaveLedState;		//
+
+	unsigned long id;		// unique agent ID --> change into GUID ?
 
 	char buffer[300];
 	
