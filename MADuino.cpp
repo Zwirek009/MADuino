@@ -34,3 +34,28 @@ boolean MADuino::sendMessage()
 	delete mess;
 }
 
+boolean MADuino::isMessageReceived()
+{
+	if( radio->available() )
+	{
+		Serial.println("Message catched !\n");
+
+		bool readingDone = false;
+
+		while (!readingDone)
+		{
+		  	// Fetch the payload, and see if this was the last one.
+		  	readingDone = radio->read(&buffer, sizeof(buffer));
+			delay(20);
+		}
+
+		messageReceived = Message::parseToMessageStruct(buffer);
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+

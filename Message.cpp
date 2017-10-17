@@ -74,3 +74,25 @@ boolean Message::createAndSendJSON()
     	return false;
     }
 }
+
+MessageStruct* Message::parseToMessageStruct(char * buffer)
+{
+	MessageStruct* messStruct = new MessageStruct();
+	StaticJsonBuffer<300> tempJsonBuffer;
+
+	JsonArray& root = tempJsonBuffer.parseArray(buffer);
+	if (!root.success())
+	{
+		Serial.println("ERROR: Cannot parse given buffer to JSON !");
+		delete messStruct;
+		return NULL;
+	}
+
+	// retrive the values
+	// TODO: Exception handling for invalid parsing to MessageStruct (issue #24)
+	messStruct->performative = root[0];
+	messStruct->sender = root[1];
+	messStruct->content = root[2];
+
+	return messStruct;
+}

@@ -38,6 +38,8 @@ public:
 	void agentSetup();
 	boolean sendMessage();	// create and send message, using Message library
 
+	boolean isMessageReceived();
+
 	unsigned long id;		// unique agent ID --> change into GUID ?
 
 	char buffer[300];

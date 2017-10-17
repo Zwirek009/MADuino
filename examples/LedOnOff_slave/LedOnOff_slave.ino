@@ -15,31 +15,15 @@ void setup() {
 }
 
 void loop() {
-  if ( slave.radio->available() )
+  if ( slave.isMessageReceived() )
     {
-    	Serial.println("Cos zlapalem");
-    	Serial.println();
-
-      	bool done = false;
-
-      	//bool msg;
-
-      	while (!done)
-      	{
-        	// Fetch the payload, and see if this was the last one.
-        	//done = slave.radio->read(&msg, sizeof(bool));
-      		done = slave.radio->read(&(slave.buffer), sizeof(slave.buffer));
-          delay(20);
-      	}
-
-      	Message *mess = new Message(slave.buffer);
-      	Serial.println(mess->contents->performative);
-      	Serial.println(mess->contents->sender);
-        Serial.println(mess->contents->content);
+      	Serial.println(slave.messageReceived->performative);
+      	Serial.println(slave.messageReceived->sender);
+        Serial.println(slave.messageReceived->content);
         Serial.println(slave.buffer);
       	Serial.println();
 
-      	if(mess->contents->sender != 0)
+      	if(slave.messageReceived->sender != 0)
       	{
       		if (slaveLedState == true)
       		{
@@ -53,6 +37,6 @@ void loop() {
       		}
 		  }
 
-      	delete mess;
+      	delete slave.messageReceived;
   	}
 }
