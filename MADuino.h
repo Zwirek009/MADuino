@@ -50,6 +50,7 @@ public:
 	MessageStruct *messageToBeSent;		// using Message library
 	MessageStruct *messageReceived;		//
 
+private:
 	const uint64_t pipeListen;	// pipes (send and receive channels) addresses
 	const uint64_t pipeSend;	//
 
