@@ -36,7 +36,9 @@ public:
 	~MADuino() {}	// basic destructor
 
 	void agentSetup();
-	boolean sendMessage();	// create and send message, using Message library
+	void createSingleMessage(char *performative, char *content);
+	void sendMessage();	// create and send message, using Message library
+	void reply();
 
 	boolean isMessageReceived();
 

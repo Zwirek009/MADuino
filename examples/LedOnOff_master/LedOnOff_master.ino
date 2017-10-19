@@ -13,12 +13,7 @@ void loop() {
 	char request[] = "Request";
 	char content[] = "Change led state";
 
-	master.messageToBeSent = new MessageStruct();	
-	master.messageToBeSent->performative = request;
-	master.messageToBeSent->sender = master.id;	
-	master.messageToBeSent->content = content;
-	master.messageToBeSent->replyWith = (master.id + (master.nxtMessageNr++));
-	master.messageToBeSent->conversationId = (master.id + (master.nxtConversationNr++));
+	master.createSingleMessage(request, content);
 
 	// send prepaired request message
 	Serial.println("Sending request for changing led state...");

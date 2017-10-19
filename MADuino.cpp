@@ -27,11 +27,30 @@ void MADuino::agentSetup()
 	radio->startListening();
 }
 
-boolean MADuino::sendMessage()
+void MADuino::createSingleMessage(char * performative, char * content)
+{
+	messageToBeSent = new MessageStruct();	
+	messageToBeSent->performative = performative;
+	messageToBeSent->content = content;
+
+	// complete single message struct
+	messageToBeSent->sender = id;
+	messageToBeSent->replyWith = nxtMessageNr++;
+	messageToBeSent->conversationId = nxtConversationNr++;
+}
+
+void MADuino::sendMessage()
 {
 	Message *mess = new Message(messageToBeSent, radio, pipeSend);
 	mess->createAndSendJSON();
 	delete mess;
+}
+
+void MADuino::reply()
+{
+	messageToBeSent->inReplyTo = messageReceived->replyWith;
+	
+	sendMessage();
 }
 
 boolean MADuino::isMessageReceived()
