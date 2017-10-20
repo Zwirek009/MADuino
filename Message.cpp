@@ -96,3 +96,13 @@ MessageStruct* Message::parseToMessageStruct(char * buffer)
 
 	return messStruct;
 }
+
+byte Message::boundToByte(byte lH, byte rH)
+{
+	return (B00001111 & rH) | (lH << 4);
+}
+
+void Message::extractBoundedByte(byte * lH, byte * rH)
+{
+	// TODO
+}

@@ -68,6 +68,8 @@ boolean MADuino::isMessageReceived()
 			delay(20);
 		}
 
+		Serial.println(buffer);
+		
 		messageReceived = Message::parseToMessageStruct(buffer);
 
 		return true;
