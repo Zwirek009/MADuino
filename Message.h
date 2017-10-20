@@ -58,7 +58,7 @@ public:
 	// scheme: lH (8 4 2 1) + rH (8 4 2 1)
 	// both arguments must be < than 16
 	static byte boundToByte(byte lH, byte rH);
-	static void extractBoundedByte(byte * lH, byte * rh);
+	static void extractBoundedByte(byte source, byte * lH, byte * rh);
 
 private:
 	StaticJsonBuffer<300> jsonBuffer;	// for creating JSON purposes

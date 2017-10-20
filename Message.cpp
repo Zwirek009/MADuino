@@ -102,7 +102,8 @@ byte Message::boundToByte(byte lH, byte rH)
 	return (B00001111 & rH) | (lH << 4);
 }
 
-void Message::extractBoundedByte(byte * lH, byte * rH)
+void Message::extractBoundedByte(byte source, byte * lH, byte * rH)
 {
-	// TODO
+	*rH = B00001111 & source;
+	*lH = (B11110000 & source) >> 4;
 }
