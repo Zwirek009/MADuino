@@ -16,6 +16,7 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
+#include <RF24Network.h>
 
 // possible agent's roles
 //typedef enum { master = 1, slave } role;
@@ -31,11 +32,12 @@ public:
 	//unsigned long get_nxt_conversation_nr();
 	//unsigned long get_nxt_message_nr();
 
-	MADuino(unsigned long agentId, const uint64_t listenAddr, const uint64_t sendAddr);	// basic constructor
+	MADuino(unsigned long agentId);	// basic constructor
 
 	~MADuino() {}	// basic destructor
 
 	void agentSetup();
+	void onLoopStart();	// must be called at each program loop start, for RF24Network purposes
 	void createSingleMessage(char *performative, char *content);
 	void sendMessage();	// create and send message, using Message library
 	void reply();
@@ -53,10 +55,13 @@ public:
 	MessageStruct *messageReceived;		//
 
 private:
-	const uint64_t pipeListen;	// pipes (send and receive channels) addresses
-	const uint64_t pipeSend;	//
+	RF24 *radio;			// specify all radio actions for radio module
+	RFNetwork *network;		//
 
-	RF24 *radio;	// specify all radio actions for radio module
+	const uint16_t node_id = 00;	// RF24Network node id, all MADuinos has the same as 
+									// message-flow on RF24Network logic level 
+									// is based on multicast
+	const uint8_t channel = 90;	// RF24Network default
 };
 
 #endif
