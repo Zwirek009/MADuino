@@ -8,13 +8,10 @@
 
 #include "Message.h"
 
-Message::Message(MessageStruct *cont, RF24 *rad, const uint64_t pipeAddr)
-	: pipeAddress(pipeAddr)
+Message::Message(MessageStruct *cont, RF24Network *net)
 {
 	contents = cont;
-	radio = rad;
-
-	//radio->setPayloadSize(300);
+	network = net;
 }
 
 Message::Message(char *buffer)
@@ -51,15 +48,9 @@ boolean Message::createAndSendJSON()
 	char buffer[300];
 	array.printTo(buffer, sizeof(buffer));
 	Serial.println(buffer);
-
-	radio->stopListening();
 	Serial.print("Now sending...\t");
-	boolean ok = radio->write(&buffer, sizeof(buffer));
-
-	//bool msg = true;
-	//bool ok = radio->write(&msg, sizeof(bool));
-
-	radio->startListening();
+	RF24NetworkHeader header(00);
+	boolean ok = network->multicast(header, &buffer, strlen(buffer)+1, 0);
 
 	if (ok)
 	{

@@ -18,6 +18,7 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
+#include <RF24Network.h>
 
 // structure representing single Message, implements FIPA-ACL standard
 struct MessageStruct
@@ -39,11 +40,10 @@ class Message
 {
 public:
 	MessageStruct *contents;		// holds "unJSONed" message 
-	RF24 *radio;					// represents the radio module
-	const uint64_t pipeAddress;	// pipe where to send the message to
+	RF24Network *network;			// represents the radio module
 
 	// send message constructors
-	Message(MessageStruct *cont, RF24 *rad, const uint64_t pipeAddr);	// standard
+	Message(MessageStruct *cont, RF24Network *net, 00);	// standard
 
 	// recceive message constructor
 	Message(char * buffer);
