@@ -14,13 +14,8 @@
 
 // send device specified
 #include <SPI.h>
-#include <nRF24L01.h>
 #include <RF24.h>
 #include <RF24Network.h>
-
-// possible agent's roles
-//typedef enum { master = 1, slave } role;
-//const char *roleName[] = {"invalid", "Master", "Slave"};
 
 // class representing a single agent
 class MADuino
@@ -56,7 +51,7 @@ public:
 
 private:
 	RF24 *radio;			// specify all radio actions for radio module
-	RFNetwork *network;		//
+	RF24Network *network;		//
 
 	const uint16_t node_id = 00;	// RF24Network node id, all MADuinos has the same as 
 									// message-flow on RF24Network logic level 

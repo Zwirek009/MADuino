@@ -8,8 +8,7 @@
 
 #include "MADuino.h"
 
-MADuino::MADuino(unsigned long agentId, const uint64_t listenAddr, const uint64_t sendAddr) 
-	: pipeListen(listenAddr), pipeSend(sendAddr)
+MADuino::MADuino(unsigned long agentId) 
 {
 	id = agentId; // to change into GUID ?
 	
@@ -21,7 +20,7 @@ void MADuino::agentSetup()
 {
 	Serial.begin(57600);
 	radio = new RF24(9,10);	
-	network = new RF24Network(&radio);
+	network = new RF24Network(*radio);
 	radio->begin();
 	network->begin(channel, node_id);
 }
@@ -45,7 +44,7 @@ void MADuino::createSingleMessage(char * performative, char * content)
 
 void MADuino::sendMessage()
 {
-	Message *mess = new Message(messageToBeSent, radio, pipeSend);
+	Message *mess = new Message(messageToBeSent, network);
 	mess->createAndSendJSON();
 	delete mess;
 }
@@ -64,16 +63,14 @@ boolean MADuino::isMessageReceived()
 		Serial.println("Message catched !\n");
 
 		RF24NetworkHeader header;
-		network.read(header,&payload,sizeof(buffer));
+		network->read(header, &buffer, sizeof(buffer));
 		Serial.println(buffer);
 		
 		messageReceived = Message::parseToMessageStruct(buffer);
 
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+
+	return false;
 }
 

@@ -16,7 +16,6 @@
 
 // send device specified
 #include <SPI.h>
-#include <nRF24L01.h>
 #include <RF24.h>
 #include <RF24Network.h>
 
@@ -43,7 +42,7 @@ public:
 	RF24Network *network;			// represents the radio module
 
 	// send message constructors
-	Message(MessageStruct *cont, RF24Network *net, 00);	// standard
+	Message(MessageStruct *cont, RF24Network *net);	// standard
 
 	// recceive message constructor
 	Message(char * buffer);
