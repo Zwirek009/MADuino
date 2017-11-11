@@ -45,7 +45,7 @@ boolean Message::createAndSendJSON()
 	array.add(contents->content);
 	// ...
 
-	char buffer[300];
+	char buffer[200];
 	array.printTo(buffer, sizeof(buffer));
 	Serial.println(buffer);
 	Serial.print("Now sending...\t");
@@ -69,7 +69,7 @@ boolean Message::createAndSendJSON()
 MessageStruct* Message::parseToMessageStruct(char * buffer)
 {
 	MessageStruct* messStruct = new MessageStruct();
-	StaticJsonBuffer<300> tempJsonBuffer;
+	StaticJsonBuffer<200> tempJsonBuffer;
 
 	JsonArray& root = tempJsonBuffer.parseArray(buffer);
 	if (!root.success())

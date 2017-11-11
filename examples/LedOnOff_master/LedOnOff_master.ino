@@ -1,6 +1,9 @@
 #include <MADuino.h>
 
-MADuino master(1);
+RF24 radio(9,10);
+RF24Network network(radio);
+
+MADuino master(1, &radio, &network);
 
 void setup() {
 	master.agentSetup();
@@ -13,7 +16,7 @@ void loop() {
 	master.onLoopStart();
 
 	char request[] = "Request";
-	char content[] = "Change led state";
+	char content[] = "Change led state 123456781234567812345678123456789 end";
 
 	master.createSingleMessage(request, content);
 

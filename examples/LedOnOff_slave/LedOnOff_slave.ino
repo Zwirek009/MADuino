@@ -1,6 +1,9 @@
 #include <MADuino.h>
 
-MADuino slave(2);
+RF24 radio(9,10);
+RF24Network network(radio);
+
+MADuino slave(2, &radio, &network);
 
 bool slaveLedState = false;
 
@@ -16,7 +19,7 @@ void setup() {
 
 void loop() {
 	slave.onLoopStart();
-	
+
   if ( slave.isMessageReceived() )
     {
       	Serial.println(slave.messageReceived->performative);

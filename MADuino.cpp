@@ -8,10 +8,11 @@
 
 #include "MADuino.h"
 
-MADuino::MADuino(unsigned long agentId) 
+MADuino::MADuino(unsigned long agentId, RF24 *rad, RF24Network *net) 
 {
 	id = agentId; // to change into GUID ?
-	
+	radio = rad;
+	network = net;
 	nxtConversationNr = 1;
 	nxtMessageNr = 1;
 }
@@ -19,8 +20,7 @@ MADuino::MADuino(unsigned long agentId)
 void MADuino::agentSetup()
 {
 	Serial.begin(57600);
-	radio = new RF24(9,10);	
-	network = new RF24Network(*radio);
+	SPI.begin();
 	radio->begin();
 	network->begin(channel, node_id);
 }

@@ -27,7 +27,7 @@ public:
 	//unsigned long get_nxt_conversation_nr();
 	//unsigned long get_nxt_message_nr();
 
-	MADuino(unsigned long agentId);	// basic constructor
+	MADuino(unsigned long agentId, RF24 *rad, RF24Network *net);	// basic constructor
 
 	~MADuino() {}	// basic destructor
 
@@ -41,7 +41,7 @@ public:
 
 	unsigned long id;		// unique agent ID --> change into GUID ?
 
-	char buffer[300];
+	char buffer[200];
 	
 	unsigned long nxtConversationNr;	// conversation and message IDs are created as
 	unsigned long nxtMessageNr;			// id + nxt_conversation/message_nr

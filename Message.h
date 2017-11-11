@@ -60,7 +60,7 @@ public:
 	static void extractBoundedByte(byte source, byte * lH, byte * rh);
 
 private:
-	StaticJsonBuffer<300> jsonBuffer;	// for creating JSON purposes
+	StaticJsonBuffer<200> jsonBuffer;	// for creating JSON purposes
 };
 
 #endif
