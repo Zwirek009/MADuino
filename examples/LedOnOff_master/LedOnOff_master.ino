@@ -1,6 +1,6 @@
 #include <MADuino.h>
 
-MADuino master(1, 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL);
+MADuino master(1);
 
 void setup() {
 	master.agentSetup();
@@ -10,6 +10,8 @@ void setup() {
 }
 
 void loop() {
+	master.onLoopStart();
+
 	char request[] = "Request";
 	char content[] = "Change led state";
 

@@ -1,6 +1,6 @@
 #include <MADuino.h>
 
-MADuino slave(2, 0xF0F0F0F0D2LL, 0xF0F0F0F0E1LL);
+MADuino slave(2);
 
 bool slaveLedState = false;
 
@@ -15,6 +15,8 @@ void setup() {
 }
 
 void loop() {
+	slave.onLoopStart();
+	
   if ( slave.isMessageReceived() )
     {
       	Serial.println(slave.messageReceived->performative);
