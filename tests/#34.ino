@@ -1,12 +1,17 @@
 #include <MADuino.h>
 
-MADuino master(1, 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL);
+RF24 radio(9,10);
+RF24Network network(radio);
+
+MADuino master(1, &radio, &network);
 
 void setup() {
 	master.agentSetup();
 }
 
 void loop() {
+	master.onLoopStart();
+	
 	byte first, second, third, fl, fr, sl, sr, tl, tr;
 
 	first = Message::boundToByte(15, 15);
