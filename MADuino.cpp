@@ -20,6 +20,10 @@ MADuino::MADuino(unsigned long agentId, RF24 *rad, RF24Network *net)
 void MADuino::agentSetup()
 {
 	Serial.begin(57600);
+
+	// IMPORTANT: analog pin A0 should be unconnected in order to use it as random seed
+	randomSeed(analogRead(0));
+	
 	SPI.begin();
 	radio->begin();
 	network->begin(channel, node_id);
@@ -47,6 +51,8 @@ void MADuino::sendMessage()
 	Message *mess = new Message(messageToBeSent, network);
 	mess->createAndSendJSON();
 	delete mess;
+
+	Serial.println(createRandomLong());
 }
 
 void MADuino::reply()
@@ -72,5 +78,11 @@ boolean MADuino::isMessageReceived()
 	}
 
 	return false;
+}
+
+long MADuino::createRandomLong()
+{
+	if (random(2)) return random(2147483647);
+	else return -(random(2147483647));
 }
 
