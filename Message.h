@@ -24,14 +24,14 @@ struct MessageStruct
 {
 	char *performative;
 	char *sender;
+	char *reciver;
 	char *content;
-	unsigned long replyWith;	// message ID
-	unsigned long replyBy;		// zamien te trzy na stringi
-	unsigned long inReplyTo;
-	char language[10];
-	char ontology[10];
-	char protocol[10];
-	unsigned long conversationId;
+	char *replyWith;	// message ID
+	char *inReplyTo;
+	char *language;
+	char *ontology;
+	char *protocol;
+	char *conversationId;
 };
 
 // class represending a single message

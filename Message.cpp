@@ -28,6 +28,9 @@ Message::Message(char *buffer)
 	contents->performative = root[0];
 	contents->sender = root[1];
 	contents->content = root[2];
+	contents->replyWith = root[3];
+	contents->inReplyTo = root[4];
+	contents->conversationId = root[5];
 	//...
 }
 
@@ -43,6 +46,9 @@ boolean Message::createAndSendJSON()
 	array.add(contents->performative);
 	array.add(contents->sender);
 	array.add(contents->content);
+	array.add(contents->replyWith);
+	array.add(contents->inReplyTo);
+	array.add(contents->conversationId);
 	// ...
 
 	char buffer[200];

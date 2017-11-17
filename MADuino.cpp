@@ -12,8 +12,6 @@ void MADuino::init(RF24 *rad, RF24Network *net)
 {
 	radio = rad;
 	network = net;
-	nxtConversationNr = 1;
-	nxtMessageNr = 1;
 }
 
 MADuino::MADuino(RF24 *rad, RF24Network *net) 
@@ -34,7 +32,7 @@ void MADuino::agentSetup()
 
 	// IMPORTANT: analog pin A0 should be unconnected in order to use it as random seed
 	randomSeed(analogRead(0));
-	if (randomId) createKey(id);
+	if (randomId) createId(id);
 	SPI.begin();
 	radio->begin();
 	network->begin(channel, node_id);
@@ -53,9 +51,9 @@ void MADuino::createSingleMessage(char * performative, char * content)
 
 	// complete single message struct
 	messageToBeSent->sender = id;
-
-	messageToBeSent->replyWith = nxtMessageNr++;
-	messageToBeSent->conversationId = nxtConversationNr++;
+	messageToBeSent->replyWith = createId(sendMessageId);
+	messageToBeSent->inReplyTo = empty;
+	messageToBeSent->conversationId = createId(sendConversationId);
 }
 
 void MADuino::sendMessage()
@@ -90,11 +88,12 @@ boolean MADuino::isMessageReceived()
 	return false;
 }
 
-void MADuino::createKey(char *out)
+char* MADuino::createId(char *out)
 {
 	byte i;
 	for(i=0; i < 5; i++)
 		out[i] = random(33,127);
 	out[i] = '\0';
+	return out;
 }
 

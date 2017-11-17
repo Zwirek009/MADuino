@@ -21,12 +21,6 @@
 class MADuino
 {
 public:
-	//unsigned long get_id();
-
-		// methods that may be used in the future
-	//unsigned long get_nxt_conversation_nr();
-	//unsigned long get_nxt_message_nr();
-
 	void init(RF24 *rad, RF24Network *net);
 	MADuino(RF24 *rad, RF24Network *net); 		// basic constructor with random agent's id
 	MADuino(RF24 *rad, RF24Network *net, String agentId);	// constructor with own agent's
@@ -34,21 +28,25 @@ public:
 
 	~MADuino() {}	// basic destructor
 
-	void agentSetup();
-	void createKey(char *out);
-	void onLoopStart();	// must be called at each program loop start, for RF24Network purposes
-	void createSingleMessage(char *performative, char *content);
-	void sendMessage();	// create and send message, using Message library
-	void reply();
+	void  agentSetup();
+	char* createId(char *out);
+	void  onLoopStart();	// must be called at each program loop start, for RF24Network purposes
+	void  createSingleMessage(char *performative, char *content);
+	void  sendMessage();	// create and send message, using Message library
+	void  reply();
 
 	boolean isMessageReceived();
 
 	char id[6];		// unique agent ID --> change into GUID ?
+	char sendMessageId[6];
+	char sendConversationId[6];
+
+	char receiveId[6];		// unique agent ID --> change into GUID ?
+	char receiveMessageId[6];
+	char receiveConversationId[6];
+	char empty = '\0';
 
 	char buffer[200];
-	
-	unsigned long nxtConversationNr;	// conversation and message IDs are created as
-	unsigned long nxtMessageNr;			// id + nxt_conversation/message_nr
 
 	MessageStruct *messageToBeSent;		// using Message library
 	MessageStruct *messageReceived;		//
