@@ -8,13 +8,24 @@
 
 #include "MADuino.h"
 
-MADuino::MADuino(unsigned long agentId, RF24 *rad, RF24Network *net) 
+void MADuino::init(RF24 *rad, RF24Network *net)
 {
-	id = agentId; // to change into GUID ?
 	radio = rad;
 	network = net;
 	nxtConversationNr = 1;
 	nxtMessageNr = 1;
+}
+
+MADuino::MADuino(RF24 *rad, RF24Network *net) 
+{
+	init(rad, net);
+}
+
+MADuino::MADuino(RF24 *rad, RF24Network *net, String agentId) 
+{
+	agentId.toCharArray(id, 6);
+	randomId = false;
+	init(rad, net);
 }
 
 void MADuino::agentSetup()
@@ -23,7 +34,7 @@ void MADuino::agentSetup()
 
 	// IMPORTANT: analog pin A0 should be unconnected in order to use it as random seed
 	randomSeed(analogRead(0));
-	
+	if (randomId) createKey(id);
 	SPI.begin();
 	radio->begin();
 	network->begin(channel, node_id);
@@ -42,6 +53,7 @@ void MADuino::createSingleMessage(char * performative, char * content)
 
 	// complete single message struct
 	messageToBeSent->sender = id;
+
 	messageToBeSent->replyWith = nxtMessageNr++;
 	messageToBeSent->conversationId = nxtConversationNr++;
 }
@@ -51,8 +63,6 @@ void MADuino::sendMessage()
 	Message *mess = new Message(messageToBeSent, network);
 	mess->createAndSendJSON();
 	delete mess;
-
-	Serial.println(createRandomLong());
 }
 
 void MADuino::reply()
@@ -80,9 +90,11 @@ boolean MADuino::isMessageReceived()
 	return false;
 }
 
-long MADuino::createRandomLong()
+void MADuino::createKey(char *out)
 {
-	if (random(2)) return random(2147483647);
-	else return -(random(2147483647));
+	byte i;
+	for(i=0; i < 5; i++)
+		out[i] = random(33,127);
+	out[i] = '\0';
 }
 

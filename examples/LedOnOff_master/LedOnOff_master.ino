@@ -3,12 +3,13 @@
 RF24 radio(9,10);
 RF24Network network(radio);
 
-MADuino master(1, &radio, &network);
+MADuino master(&radio, &network);
 
 void setup() {
 	master.agentSetup();
 
-	Serial.println("LedOnOff --> Agent started --> role: Master");
+	Serial.print("LedOnOff --> Agent started --> role: Master, id: ");
+	Serial.println(master.id);
 	Serial.println();
 }
 

@@ -27,12 +27,15 @@ public:
 	//unsigned long get_nxt_conversation_nr();
 	//unsigned long get_nxt_message_nr();
 
-	MADuino(unsigned long agentId, RF24 *rad, RF24Network *net);	// basic constructor
+	void init(RF24 *rad, RF24Network *net);
+	MADuino(RF24 *rad, RF24Network *net); 		// basic constructor with random agent's id
+	MADuino(RF24 *rad, RF24Network *net, String agentId);	// constructor with own agent's
+															// ID definition
 
 	~MADuino() {}	// basic destructor
 
 	void agentSetup();
-	long createRandomLong();
+	void createKey(char *out);
 	void onLoopStart();	// must be called at each program loop start, for RF24Network purposes
 	void createSingleMessage(char *performative, char *content);
 	void sendMessage();	// create and send message, using Message library
@@ -40,7 +43,7 @@ public:
 
 	boolean isMessageReceived();
 
-	unsigned long id;		// unique agent ID --> change into GUID ?
+	char id[6];		// unique agent ID --> change into GUID ?
 
 	char buffer[200];
 	
@@ -58,6 +61,7 @@ private:
 									// message-flow on RF24Network logic level 
 									// is based on multicast
 	const uint8_t channel = 90;	// RF24Network default
+	bool randomId = true;
 };
 
 #endif

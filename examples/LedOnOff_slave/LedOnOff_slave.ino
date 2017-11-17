@@ -3,7 +3,7 @@
 RF24 radio(9,10);
 RF24Network network(radio);
 
-MADuino slave(2, &radio, &network);
+MADuino slave(&radio, &network);
 
 bool slaveLedState = false;
 
@@ -13,7 +13,8 @@ void setup() {
 	// prepaire LED for signalizing message send or receive
   pinMode(7, OUTPUT);
   
-  Serial.println("Agent started --> role: Slave");
+	Serial.print("Agent started --> role: Slave, id: ");
+	Serial.println(slave.id);
   Serial.println();
 }
 

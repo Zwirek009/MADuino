@@ -23,7 +23,7 @@
 struct MessageStruct
 {
 	char *performative;
-	unsigned long sender; // zamien na np MAC i prefix
+	char *sender;
 	char *content;
 	unsigned long replyWith;	// message ID
 	unsigned long replyBy;		// zamien te trzy na stringi

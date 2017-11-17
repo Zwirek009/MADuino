@@ -3,7 +3,7 @@
 RF24 radio(9,10);
 RF24Network network(radio);
 
-MADuino master(1, &radio, &network);
+MADuino master(&radio, &network);
 
 void setup() {
 	master.agentSetup();
