@@ -23,11 +23,25 @@ void loop() {
 
   if ( slave.isMessageReceived() )
     {
-      	Serial.println(slave.messageReceived->performative);
-      	Serial.println(slave.messageReceived->sender);
-				Serial.println(slave.messageReceived->content);
+				Serial.print("performative: ");
+				Serial.println(slave.messageReceived->performative);
+				Serial.print("sender: ");
+				Serial.println(slave.messageReceived->sender);
+				Serial.print("reciver: ");
+				Serial.println(slave.messageReceived->reciver);
+				Serial.print("content: ");
+				Serial.print(slave.messageReceived->content);
+				Serial.print("replyWith: ");
 				Serial.println(slave.messageReceived->replyWith);
-      	Serial.println(slave.messageReceived->inReplyTo);
+				Serial.print("inReplyTo: ");
+				Serial.println(slave.messageReceived->inReplyTo);
+				Serial.print("language: ");
+				Serial.println(slave.messageReceived->language);
+				Serial.print("ontology: ");
+				Serial.println(slave.messageReceived->ontology);
+				Serial.print("protocol: ");
+				Serial.println(slave.messageReceived->protocol);
+				Serial.print("conversationId: ");
 				Serial.println(slave.messageReceived->conversationId);
       	Serial.println();
 
