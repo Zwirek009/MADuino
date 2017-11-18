@@ -30,7 +30,7 @@ void loop() {
 				Serial.print("reciver: ");
 				Serial.println(slave.messageReceived->reciver);
 				Serial.print("content: ");
-				Serial.print(slave.messageReceived->content);
+				Serial.println(slave.messageReceived->content);
 				Serial.print("replyWith: ");
 				Serial.println(slave.messageReceived->replyWith);
 				Serial.print("inReplyTo: ");
