@@ -49,7 +49,7 @@ public:
 
 	protocol protocol = NO_PROTOCOL;
 	ontology ontology = NO_ONTOLOGY;
-	language language = MADUINO;
+	language language = MADUINO_MINIMAL;
 
 	char buffer[200];
 

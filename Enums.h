@@ -19,7 +19,7 @@ enum performative
 
 enum language
 {
-	MADUINO
+	MADUINO_MINIMAL
 };
 
 enum ontology
