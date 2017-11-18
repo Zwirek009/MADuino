@@ -33,7 +33,7 @@ public:
 	char* createId(char *out);
 	void  onLoopStart();	// must be called at each program loop start, for RF24Network purposes
 	void  createSingleMessage(performative performative, char *content);
-	void  sendMessage();	// create and send message, using Message library
+	void  sendMessageToAll();	// create and send message, using Message library
 	void  reply();
 
 	boolean isMessageReceived();

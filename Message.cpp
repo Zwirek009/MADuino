@@ -27,11 +27,14 @@ Message::Message(char *buffer)
 	// retrive the values
 	contents->performative = root[0];
 	contents->sender = root[1];
-	contents->content = root[2];
-	contents->replyWith = root[3];
-	contents->inReplyTo = root[4];
-	contents->conversationId = root[5];
-	//...
+	contents->reciver = root[2];
+	contents->content = root[3];
+	contents->replyWith = root[4];
+	contents->inReplyTo = root[5];
+	contents->language = root[6];
+	contents->ontology = root[7];
+	contents->protocol = root[8];
+	contents->conversationId = root[9];
 }
 
 Message::~Message()
@@ -45,11 +48,14 @@ boolean Message::createAndSendJSON()
 
 	array.add(contents->performative);
 	array.add(contents->sender);
+	array.add(contents->reciver);
 	array.add(contents->content);
 	array.add(contents->replyWith);
 	array.add(contents->inReplyTo);
+	array.add(contents->language);
+	array.add(contents->ontology);
+	array.add(contents->protocol);
 	array.add(contents->conversationId);
-	// ...
 
 	char buffer[200];
 	array.printTo(buffer, sizeof(buffer));
@@ -88,10 +94,14 @@ MessageStruct* Message::parseToMessageStruct(char * buffer)
 	// retrive the values
 	messStruct->performative = root[0];
 	messStruct->sender = root[1];
-	messStruct->content = root[2];
-	messStruct->replyWith = root[3];
-	messStruct->inReplyTo = root[4];
-	messStruct->conversationId = root[5];
+	messStruct->reciver = root[2];
+	messStruct->content = root[3];
+	messStruct->replyWith = root[4];
+	messStruct->inReplyTo = root[5];
+	messStruct->language = root[6];
+	messStruct->ontology = root[7];
+	messStruct->protocol = root[8];
+	messStruct->conversationId = root[9];
 
 	return messStruct;
 }

@@ -51,13 +51,18 @@ void MADuino::createSingleMessage(performative performative, char * content)
 
 	// complete single message struct
 	messageToBeSent->sender = id;
+	messageToBeSent->language = language;
+	messageToBeSent->ontology = ontology;
+	messageToBeSent->protocol = protocol;
 	messageToBeSent->replyWith = createId(sendMessageId);
 	messageToBeSent->inReplyTo = empty;
 	messageToBeSent->conversationId = createId(sendConversationId);
 }
 
-void MADuino::sendMessage()
+void MADuino::sendMessageToAll()
 {
+	messageToBeSent->reciver = empty;
+
 	Message *mess = new Message(messageToBeSent, network);
 	mess->createAndSendJSON();
 	delete mess;
@@ -67,7 +72,7 @@ void MADuino::reply()
 {
 	messageToBeSent->inReplyTo = messageReceived->replyWith;
 	
-	sendMessage();
+	sendMessageToAll();
 }
 
 boolean MADuino::isMessageReceived()
