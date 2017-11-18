@@ -17,6 +17,29 @@
 #include <RF24.h>
 #include <RF24Network.h>
 
+enum performative
+{
+	REQUEST,
+	PROPOSE,
+	REFUSE,
+	AGREE
+};
+
+enum language
+{
+	MADUINO
+};
+
+enum ontology
+{
+	NO_ONTOLOGY
+};
+
+enum protocol
+{
+	REQUEST_INTERACTION_PROTOCOL
+};
+
 // class representing a single agent
 class MADuino
 {

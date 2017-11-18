@@ -86,10 +86,12 @@ MessageStruct* Message::parseToMessageStruct(char * buffer)
 	}
 
 	// retrive the values
-	// TODO: Exception handling for invalid parsing to MessageStruct (issue #24)
 	messStruct->performative = root[0];
 	messStruct->sender = root[1];
 	messStruct->content = root[2];
+	messStruct->replyWith = root[3];
+	messStruct->inReplyTo = root[4];
+	messStruct->conversationId = root[5];
 
 	return messStruct;
 }

@@ -25,8 +25,10 @@ void loop() {
     {
       	Serial.println(slave.messageReceived->performative);
       	Serial.println(slave.messageReceived->sender);
-        Serial.println(slave.messageReceived->content);
-        Serial.println(slave.buffer);
+				Serial.println(slave.messageReceived->content);
+				Serial.println(slave.messageReceived->replyWith);
+      	Serial.println(slave.messageReceived->inReplyTo);
+				Serial.println(slave.messageReceived->conversationId);
       	Serial.println();
 
       	if(slave.messageReceived->sender != 0)
