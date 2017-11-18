@@ -43,36 +43,60 @@ void MADuino::onLoopStart()
 	network->update(); 
 }
 
-void MADuino::createSingleMessage(performative performative, char * content)
+void MADuino::newConversationSetup()
+{
+	createId(conversationId);
+}
+
+void MADuino::basicMessageFill(performative performative, char *content)
 {
 	messageToBeSent = new MessageStruct();	
 	messageToBeSent->performative = (unsigned int)performative;
 	messageToBeSent->content = content;
-
-	// complete single message struct
 	messageToBeSent->sender = id;
 	messageToBeSent->language = language;
 	messageToBeSent->ontology = ontology;
 	messageToBeSent->protocol = protocol;
 	messageToBeSent->replyWith = createId(sendMessageId);
-	messageToBeSent->inReplyTo = empty;
-	messageToBeSent->conversationId = createId(sendConversationId);
 }
 
-void MADuino::sendMessageToAll()
+void MADuino::createMessage(performative performative, char * content, char *reciver)
 {
-	messageToBeSent->reciver = empty;
+	basicMessageFill(performative, content);
+	messageToBeSent->reciver = reciver;
+	messageToBeSent->inReplyTo = empty;
+	messageToBeSent->conversationId = sendConversationId;
+}
 
+void MADuino::createMessageToAll(performative performative, char * content)
+{
+	basicMessageFill(performative, content);
+	messageToBeSent->reciver = empty;
+	messageToBeSent->inReplyTo = empty;
+	messageToBeSent->conversationId = sendConversationId;
+}
+
+void MADuino::createReply(performative performative, char * content)
+{
+	basicMessageFill(performative, content);
+	messageToBeSent->reciver = messageReceived->sender;
+	messageToBeSent->inReplyTo = messageReceived->replyWith;
+	messageToBeSent->conversationId = messageReceived->conversationId;
+}
+
+void MADuino::createReplyToAll(performative performative, char * content)
+{
+	basicMessageFill(performative, content);
+	messageToBeSent->reciver = empty;
+	messageToBeSent->inReplyTo = messageReceived->replyWith;
+	messageToBeSent->conversationId = messageReceived->conversationId;
+}
+
+void MADuino::sendMessage()
+{
 	Message *mess = new Message(messageToBeSent, network);
 	mess->createAndSendJSON();
 	delete mess;
-}
-
-void MADuino::reply()
-{
-	messageToBeSent->inReplyTo = messageReceived->replyWith;
-	
-	sendMessageToAll();
 }
 
 boolean MADuino::isMessageReceived()

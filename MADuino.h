@@ -30,11 +30,14 @@ public:
 	~MADuino() {}	// basic destructor
 
 	void  agentSetup();
+	void  newConversationSetup();
 	char* createId(char *out);
 	void  onLoopStart();	// must be called at each program loop start, for RF24Network purposes
-	void  createSingleMessage(performative performative, char *content);
-	void  sendMessageToAll();	// create and send message, using Message library
-	void  reply();
+	void  createMessage(performative performative, char *content, char *reciver);
+	void  createMessageToAll(performative performative, char *content);
+	void  createReply(performative performative, char *content);
+	void  createReplyToAll(performative performative, char *content);
+	void  sendMessage();
 
 	boolean isMessageReceived();
 
@@ -65,6 +68,8 @@ private:
 									// is based on multicast
 	const uint8_t channel = 90;	// RF24Network default
 	bool randomId = true;
+
+	void basicMessageFill(performative performative, char *content);
 };
 
 #endif
