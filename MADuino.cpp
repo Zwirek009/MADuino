@@ -8,120 +8,97 @@
 
 #include "MADuino.h"
 
-MADuino::MADuino(unsigned long agentId, int r, const uint64_t listenAddr, const uint64_t sendAddr) 
-	: pipeListen(listenAddr), pipeSend(sendAddr)
+void MADuino::init(RF24 *rad, RF24Network *net)
 {
-
-	id = agentId; // to change into GUID ?
-	agentRole = r;			// for testing purposes --> led on-off
-
-	nxtConversationNr = 1;
-	nxtMessageNr = 1;
-	slaveLedState = false; 	// for testing purposes --> led on-off
+	radio = rad;
+	network = net;
 }
 
-void MADuino::masterSetup() // only for testing purposes --> led on-off
+MADuino::MADuino(RF24 *rad, RF24Network *net) 
 {
-	radio = new RF24(9,10);
-
-	//Serial.begin(57600);
-  	Serial.println("Agent started --> role: Master");
-  	Serial.println();
-
-  	radio->begin();
-
-  	radio->openWritingPipe(pipeSend);
-  	radio->openReadingPipe(1, pipeListen);
-
-  	radio->startListening();
-  	radio->printDetails();
+	init(rad, net);
 }
 
-void MADuino::slaveSetup() // only for testing purposes --> led on-off
+MADuino::MADuino(RF24 *rad, RF24Network *net, String agentId) 
 {
-	radio = new RF24(9,10);
+	agentId.toCharArray(id, 6);
+	randomId = false;
+	init(rad, net);
+}
 
-	// prepaire LED for signalizing message send or receive
-	pinMode(7, OUTPUT);
+void MADuino::agentSetup()
+{
+	Serial.begin(57600);
 
-	printf("Agent started --> role: Slave\n\n");
-
+	// IMPORTANT: analog pin A0 should be unconnected in order to use it as random seed
+	randomSeed(analogRead(0));
+	if (randomId) createId(id);
+	SPI.begin();
 	radio->begin();
-
-	radio->openWritingPipe(pipeSend);
-  	radio->openReadingPipe(1, pipeListen);
-  	radio->startListening();
-  	radio->printDetails();
+	network->begin(channel, node_id);
 }
-void MADuino::runMaster() // only for testing purposes --> led on-off
+
+void MADuino::onLoopStart()
 {
-	// create request for lightning message
-	messageToBeSent = new MessageStruct();
-	char request[] = "Request";
-	messageToBeSent->performative = request;
-	messageToBeSent->sender = id;
-	char content[] = "Light down";
+	network->update(); 
+}
+
+void MADuino::createSingleMessage(performative performative, char * content)
+{
+	messageToBeSent = new MessageStruct();	
+	messageToBeSent->performative = (unsigned int)performative;
 	messageToBeSent->content = content;
-	messageToBeSent->replyWith = (id+(nxtMessageNr++));
-	messageToBeSent->conversationId = (id+(nxtConversationNr++));
 
-	// send prepaired request message
-	Serial.println("Sending request for lightning up...");
-	sendMessage();
-
-	delay(3000);
+	// complete single message struct
+	messageToBeSent->sender = id;
+	messageToBeSent->language = language;
+	messageToBeSent->ontology = ontology;
+	messageToBeSent->protocol = protocol;
+	messageToBeSent->replyWith = createId(sendMessageId);
+	messageToBeSent->inReplyTo = empty;
+	messageToBeSent->conversationId = createId(sendConversationId);
 }
 
-void MADuino::runSlave() // only for testing purposes --> led on-off
+void MADuino::sendMessageToAll()
 {
-	if ( radio->available() )
-    {
-    	Serial.println("Cos zlapalem");
-    	Serial.println();
+	messageToBeSent->reciver = empty;
 
-      	bool done = false;
-
-      	//bool msg;
-
-      	while (!done)
-      	{
-        	// Fetch the payload, and see if this was the last one.
-        	//done = radio->read(&msg, sizeof(bool));
-      		done = radio->read(&buffer, sizeof(buffer));
-
-			delay(20);
-      	}
-
-      	Message *mess = new Message(buffer);
-      	Serial.println(mess->contents->performative);
-      	Serial.println(mess->contents->sender);
-      	Serial.println(mess->contents->content);
-      	Serial.println();
-
-      	if(mess->contents->sender != 0)
-      	{
-      		if (slaveLedState == true)
-      		{
-      			digitalWrite(7, LOW);
-      			slaveLedState = false;
-      		}
-      		else
-      		{
-      			digitalWrite(7, HIGH);
-      			slaveLedState = true;
-      		}
-		  }
-
-      	delete mess;
-
-      	//Serial.println(buffer);
-  	}
-}
-
-boolean MADuino::sendMessage()
-{
-	Message *mess = new Message(messageToBeSent, radio, pipeSend);
+	Message *mess = new Message(messageToBeSent, network);
 	mess->createAndSendJSON();
 	delete mess;
+}
+
+void MADuino::reply()
+{
+	messageToBeSent->inReplyTo = messageReceived->replyWith;
+	
+	sendMessageToAll();
+}
+
+boolean MADuino::isMessageReceived()
+{
+	while( network->available() )
+	{
+		Serial.println("Message catched !\n");
+
+		RF24NetworkHeader header;
+		network->read(header, &buffer, sizeof(buffer));
+		Serial.println(buffer);
+		
+		messageReceived = Message::parseToMessageStruct(buffer);
+
+		return true;
+	}
+
+	return false;
+}
+
+char* MADuino::createId(char *out)
+{
+	byte i;
+	for(i=0; i < 5; i++)
+		out[i] = random(33,127);
+	out[i] = '\0';
+	return out;
 }
 

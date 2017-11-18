@@ -11,57 +11,60 @@
 
 #include "Arduino.h"
 #include "Message.h"
-//#include <printf.h>
-//#include <Time.h>
+#include "Enums.h"
 
 // send device specified
 #include <SPI.h>
-#include <nRF24L01.h>
 #include <RF24.h>
-
-// possible agent's roles
-//typedef enum { master = 1, slave } role;
-//const char *roleName[] = {"invalid", "Master", "Slave"};
+#include <RF24Network.h>
 
 // class representing a single agent
 class MADuino
 {
 public:
-	//unsigned long get_id();
-
-		// methods that may be used in the future
-	//unsigned long get_nxt_conversation_nr();
-	//unsigned long get_nxt_message_nr();
-
-	MADuino(unsigned long agentId, int r, const uint64_t listenAddr, const uint64_t sendAddr);	// basic constructor
+	void init(RF24 *rad, RF24Network *net);
+	MADuino(RF24 *rad, RF24Network *net); 		// basic constructor with random agent's id
+	MADuino(RF24 *rad, RF24Network *net, String agentId);	// constructor with own agent's
+															// ID definition
 
 	~MADuino() {}	// basic destructor
 
-	void runMaster();		// for testing purposes --> led on-off
-	void runSlave();		// methods specifying specyfic role agents
-							//
-	void masterSetup();		//
-	void slaveSetup();		//
+	void  agentSetup();
+	char* createId(char *out);
+	void  onLoopStart();	// must be called at each program loop start, for RF24Network purposes
+	void  createSingleMessage(performative performative, char *content);
+	void  sendMessageToAll();	// create and send message, using Message library
+	void  reply();
 
-	boolean sendMessage();	// create and send message, using Message library
-private:
-	int agentRole;			// for testing purposes --> led on-off
-	bool slaveLedState;		//
+	boolean isMessageReceived();
 
-	unsigned long id;		// unique agent ID --> change into GUID ?
+	char id[6];		// unique agent ID --> change into GUID ?
+	char sendMessageId[6];
+	char sendConversationId[6];
 
-	char buffer[300];
-	
-	unsigned long nxtConversationNr;	// conversation and message IDs are created as
-	unsigned long nxtMessageNr;			// id + nxt_conversation/message_nr
+	char receiveId[6];		// unique agent ID --> change into GUID ?
+	char receiveMessageId[6];
+	char receiveConversationId[6];
+	char empty = '\0';
+
+	protocol protocol = NO_PROTOCOL;
+	ontology ontology = NO_ONTOLOGY;
+	language language = MADUINO;
+
+	char buffer[200];
 
 	MessageStruct *messageToBeSent;		// using Message library
 	MessageStruct *messageReceived;		//
 
-	const uint64_t pipeListen;	// pipes (send and receive channels) addresses
-	const uint64_t pipeSend;	//
+private:
+	RF24 *radio;			// specify all radio actions for radio module
+	RF24Network *network;		//
 
-	RF24 *radio;	// specify all radio actions for radio module
+	const uint16_t node_id = 00;	// RF24Network node id, all MADuinos has the same as 
+									// message-flow on RF24Network logic level 
+									// is based on multicast
+	const uint8_t channel = 90;	// RF24Network default
+	bool randomId = true;
 };
 
 #endif

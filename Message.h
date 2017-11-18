@@ -10,30 +10,29 @@
 #define MESSAGE_H
 
 #include "Arduino.h"
+#include "Enums.h"
 
 // JSON parser
 #include <ArduinoJson.h>
 
-//#include "printf.h"
-
 // send device specified
 #include <SPI.h>
-#include <nRF24L01.h>
 #include <RF24.h>
+#include <RF24Network.h>
 
 // structure representing single Message, implements FIPA-ACL standard
 struct MessageStruct
 {
-	char *performative;
-	unsigned long sender; // zamien na np MAC i prefix
+	unsigned int performative;
+	char *sender;
+	char *reciver;
 	char *content;
-	unsigned long replyWith;	// message ID
-	unsigned long replyBy;		// zamien te trzy na stringi
-	unsigned long inReplyTo;
-	char language[10];
-	char ontology[10];
-	char protocol[10];
-	unsigned long conversationId;
+	char *replyWith;	// message ID
+	char *inReplyTo;
+	unsigned int language;
+	unsigned int ontology;
+	unsigned int protocol;
+	char *conversationId;
 };
 
 // class represending a single message
@@ -41,23 +40,28 @@ class Message
 {
 public:
 	MessageStruct *contents;		// holds "unJSONed" message 
-	RF24 *radio;					// represents the radio module
-	const uint64_t pipeAddress;	// pipe where to send the message to
+	RF24Network *network;			// represents the radio module
 
 	// send message constructors
-	Message(MessageStruct *cont, RF24 *rad, const uint64_t pipeAddr);	// standard
+	Message(MessageStruct *cont, RF24Network *net);	// standard
 
 	// recceive message constructor
 	Message(char * buffer);
+	static MessageStruct* parseToMessageStruct(char * buffer);
 
 	// basic message destructor
 	~Message();
 
 	boolean createAndSendJSON();	// method that encapsulate MessageStruct data into a JSON
 									// and sends it using radio on pipe with pipe_address
+	
+	// scheme: lH (8 4 2 1) + rH (8 4 2 1)
+	// both arguments must be < than 16
+	static byte boundToByte(byte lH, byte rH);
+	static void extractBoundedByte(byte source, byte * lH, byte * rh);
 
 private:
-	StaticJsonBuffer<300> jsonBuffer;	// for creating JSON purposes
+	StaticJsonBuffer<200> jsonBuffer;	// for creating JSON purposes
 };
 
 #endif

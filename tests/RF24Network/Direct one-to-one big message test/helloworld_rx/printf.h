@@ -13,19 +13,19 @@
  * enables 'printf'
  */
 
-#ifndef PRINTF_H
-#define PRINTF_H
+#ifndef __PRINTF_H__
+#define __PRINTF_H__
 
 #ifdef ARDUINO
 
-inline int serial_putc( char c, FILE * ) 
+int serial_putc( char c, FILE * ) 
 {
   Serial.write( c );
 
   return c;
 } 
 
-inline void printf_begin(void)
+void printf_begin(void)
 {
   fdevopen( &serial_putc, 0 );
 }
