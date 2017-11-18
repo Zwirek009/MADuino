@@ -10,6 +10,7 @@
 #define MESSAGE_H
 
 #include "Arduino.h"
+#include "Enums.h"
 
 // JSON parser
 #include <ArduinoJson.h>
@@ -22,15 +23,15 @@
 // structure representing single Message, implements FIPA-ACL standard
 struct MessageStruct
 {
-	char *performative;
+	unsigned int performative;
 	char *sender;
 	char *reciver;
 	char *content;
 	char *replyWith;	// message ID
 	char *inReplyTo;
-	char *language;
-	char *ontology;
-	char *protocol;
+	unsigned int language;
+	unsigned int ontology;
+	unsigned int protocol;
 	char *conversationId;
 };
 

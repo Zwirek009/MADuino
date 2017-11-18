@@ -43,10 +43,10 @@ void MADuino::onLoopStart()
 	network->update(); 
 }
 
-void MADuino::createSingleMessage(char * performative, char * content)
+void MADuino::createSingleMessage(performative performative, char * content)
 {
 	messageToBeSent = new MessageStruct();	
-	messageToBeSent->performative = performative;
+	messageToBeSent->performative = (unsigned int)performative;
 	messageToBeSent->content = content;
 
 	// complete single message struct

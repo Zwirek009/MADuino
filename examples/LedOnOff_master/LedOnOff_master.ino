@@ -16,7 +16,7 @@ void setup() {
 void loop() {
 	master.onLoopStart();
 
-	char request[] = "Request";
+	performative request = REQUEST;
 	char content[] = "Change led state 123456781234567812345678123456789 end";
 
 	master.createSingleMessage(request, content);

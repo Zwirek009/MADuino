@@ -11,34 +11,12 @@
 
 #include "Arduino.h"
 #include "Message.h"
+#include "Enums.h"
 
 // send device specified
 #include <SPI.h>
 #include <RF24.h>
 #include <RF24Network.h>
-
-enum performative
-{
-	REQUEST,
-	PROPOSE,
-	REFUSE,
-	AGREE
-};
-
-enum language
-{
-	MADUINO
-};
-
-enum ontology
-{
-	NO_ONTOLOGY
-};
-
-enum protocol
-{
-	REQUEST_INTERACTION_PROTOCOL
-};
 
 // class representing a single agent
 class MADuino
@@ -54,7 +32,7 @@ public:
 	void  agentSetup();
 	char* createId(char *out);
 	void  onLoopStart();	// must be called at each program loop start, for RF24Network purposes
-	void  createSingleMessage(char *performative, char *content);
+	void  createSingleMessage(performative performative, char *content);
 	void  sendMessage();	// create and send message, using Message library
 	void  reply();
 
@@ -68,6 +46,10 @@ public:
 	char receiveMessageId[6];
 	char receiveConversationId[6];
 	char empty = '\0';
+
+	protocol protocol = NO_PROTOCOL;
+	ontology ontology = NO_ONTOLOGY;
+	language language = MADUINO;
 
 	char buffer[200];
 
