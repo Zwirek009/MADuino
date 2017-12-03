@@ -49,6 +49,7 @@ public:
 	char receiveMessageId[6];
 	char receiveConversationId[6];
 	char empty = '\0';
+	char all = '*';
 
 	protocol protocol = NO_PROTOCOL;
 	ontology ontology = NO_ONTOLOGY;
