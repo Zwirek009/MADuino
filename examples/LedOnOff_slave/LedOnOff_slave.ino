@@ -33,6 +33,8 @@ void loop() {
 				Serial.println(slave.messageReceived->content);
 				Serial.print("replyWith: ");
 				Serial.println(slave.messageReceived->replyWith);
+				Serial.print("replyBy: ");
+				Serial.println(slave.messageReceived->replyBy);
 				Serial.print("inReplyTo: ");
 				Serial.println(slave.messageReceived->inReplyTo);
 				Serial.print("language: ");

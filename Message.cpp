@@ -30,11 +30,12 @@ Message::Message(char *buffer)
 	contents->reciver = root[2];
 	contents->content = root[3];
 	contents->replyWith = root[4];
-	contents->inReplyTo = root[5];
-	contents->language = root[6];
-	contents->ontology = root[7];
-	contents->protocol = root[8];
-	contents->conversationId = root[9];
+	contents->replyBy = root[5];
+	contents->inReplyTo = root[6];
+	contents->language = root[7];
+	contents->ontology = root[8];
+	contents->protocol = root[9];
+	contents->conversationId = root[10];
 }
 
 Message::~Message()
@@ -97,11 +98,12 @@ MessageStruct* Message::parseToMessageStruct(char * buffer)
 	messStruct->reciver = root[2];
 	messStruct->content = root[3];
 	messStruct->replyWith = root[4];
-	messStruct->inReplyTo = root[5];
-	messStruct->language = root[6];
-	messStruct->ontology = root[7];
-	messStruct->protocol = root[8];
-	messStruct->conversationId = root[9];
+	messStruct->replyBy = root[5];
+	messStruct->inReplyTo = root[6];
+	messStruct->language = root[7];
+	messStruct->ontology = root[8];
+	messStruct->protocol = root[9];
+	messStruct->conversationId = root[10];
 
 	return messStruct;
 }

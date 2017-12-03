@@ -45,7 +45,7 @@ void MADuino::onLoopStart()
 
 void MADuino::newConversationSetup()
 {
-	createId(conversationId);
+	createId(sendConversationId);
 }
 
 void MADuino::basicMessageFill(performative performative, char *content)
@@ -58,21 +58,22 @@ void MADuino::basicMessageFill(performative performative, char *content)
 	messageToBeSent->ontology = ontology;
 	messageToBeSent->protocol = protocol;
 	messageToBeSent->replyWith = createId(sendMessageId);
+	messageToBeSent->replyBy = &empty;
 }
 
 void MADuino::createMessage(performative performative, char * content, char *reciver)
 {
 	basicMessageFill(performative, content);
 	messageToBeSent->reciver = reciver;
-	messageToBeSent->inReplyTo = empty;
+	messageToBeSent->inReplyTo = &empty;
 	messageToBeSent->conversationId = sendConversationId;
 }
 
 void MADuino::createMessageToAll(performative performative, char * content)
 {
 	basicMessageFill(performative, content);
-	messageToBeSent->reciver = empty;
-	messageToBeSent->inReplyTo = empty;
+	messageToBeSent->reciver = &empty;
+	messageToBeSent->inReplyTo = &empty;
 	messageToBeSent->conversationId = sendConversationId;
 }
 
@@ -87,7 +88,7 @@ void MADuino::createReply(performative performative, char * content)
 void MADuino::createReplyToAll(performative performative, char * content)
 {
 	basicMessageFill(performative, content);
-	messageToBeSent->reciver = empty;
+	messageToBeSent->reciver = &empty;
 	messageToBeSent->inReplyTo = messageReceived->replyWith;
 	messageToBeSent->conversationId = messageReceived->conversationId;
 }

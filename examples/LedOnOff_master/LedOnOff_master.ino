@@ -20,7 +20,7 @@ void loop() {
 	char content[] = "Change led state 123456781234567812345678123456789 end";
 
 	master.newConversationSetup();
-	master.createMessage(request, content);
+	master.createMessageToAll(request, content);
 
 	// send prepaired request message
 	Serial.println("Sending request for changing led state...");

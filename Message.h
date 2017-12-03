@@ -28,6 +28,7 @@ struct MessageStruct
 	char *reciver;
 	char *content;
 	char *replyWith;	// message ID
+	char *replyBy;	// not used
 	char *inReplyTo;
 	unsigned int language;
 	unsigned int ontology;
