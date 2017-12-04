@@ -112,7 +112,8 @@ boolean MADuino::isMessageReceived()
 		
 		messageReceived = Message::parseToMessageStruct(buffer);
 
-		return true;
+		if(messageReceived->reciver == all || messageReceived->reciver == id)
+			return true;
 	}
 
 	return false;
