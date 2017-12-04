@@ -5,7 +5,8 @@ RF24Network network(radio);
 
 MADuino proposeInitiator(&radio, &network, "INIT");
 
-char participantID[] = "PART";
+char 			participantID[] = "PART";
+unsigned long 	waitForResponseMillis = 10000;
 
 void setup() {
 	proposeInitiator.agentSetup();
@@ -28,6 +29,37 @@ void loop() {
 	// PROPOSE
 	proposeInitiator.createMessage((performative)PROPOSE, "I can do something.", participantID);
 	proposeInitiator.sendMessage();
+	unsigned long startTime = millis();
+	boolean protocolSucces = false;
+
+	// catch response
+	while ( (millis() - startTime) < waitForResponseMillis )
+	{
+		if (proposeInitiator.isMessageReceived() &&
+			proposeInitiator.messageReceived->inReplyTo == proposeInitiator.sendConversationId )
+		{
+			// reponse catched
+			if(proposeInitiator.messageReceived->performative == (performative)ACCEPT_PROPOSAL)
+			{
+				Serial.println("OK, I am doing something.\n");
+				protocolSucces = true;
+			}
+			else if (proposeInitiator.messageReceived->performative == (performative)REJECT_PROPOSAL)
+			{
+				Serial.println("OK, I will not do that.\n");
+				protocolSucces = true;
+			}
+			// otherwise not propper response
+			
+			break;
+		}
+	}
+
+	if (!protocolSucces)
+	{
+		// TODO #58
+		Serial.println("Propper protocol response from participant not received\n");
+	}
 	
 	delay(5000);
 }
