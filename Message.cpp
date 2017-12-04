@@ -52,6 +52,7 @@ boolean Message::createAndSendJSON()
 	array.add(contents->reciver);
 	array.add(contents->content);
 	array.add(contents->replyWith);
+	array.add(contents->replyBy);
 	array.add(contents->inReplyTo);
 	array.add(contents->language);
 	array.add(contents->ontology);
