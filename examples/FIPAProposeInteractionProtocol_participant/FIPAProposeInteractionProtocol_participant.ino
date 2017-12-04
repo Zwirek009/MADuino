@@ -3,7 +3,9 @@
 RF24 radio(9,10);
 RF24Network network(radio);
 
-MADuino proposeParticipant(&radio, &network);
+MADuino proposeParticipant(&radio, &network, "PART");
+
+char 
 
 void setup() {
 	proposeParticipant.agentSetup();
