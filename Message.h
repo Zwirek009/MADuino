@@ -47,7 +47,6 @@ public:
 	Message(MessageStruct *cont, RF24Network *net);	// standard
 
 	// recceive message constructor
-	Message(char * buffer);
 	static MessageStruct* parseToMessageStruct(char * buffer);
 
 	// basic message destructor

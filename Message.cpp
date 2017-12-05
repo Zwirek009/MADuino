@@ -14,30 +14,6 @@ Message::Message(MessageStruct *cont, RF24Network *net)
 	network = net;
 }
 
-Message::Message(char *buffer)
-{
-	contents = new MessageStruct();
-
-	JsonArray& root = jsonBuffer.parseArray(buffer);
-	if (!root.success())
-	{
-  		Serial.println("parseArray() failed");
-	}
-
-	// retrive the values
-	contents->performative = root[0];
-	contents->sender = root[1];
-	contents->reciver = root[2];
-	contents->content = root[3];
-	contents->replyWith = root[4];
-	contents->replyBy = root[5];
-	contents->inReplyTo = root[6];
-	contents->language = root[7];
-	contents->ontology = root[8];
-	contents->protocol = root[9];
-	contents->conversationId = root[10];
-}
-
 Message::~Message()
 {
 	delete contents;
@@ -92,7 +68,7 @@ MessageStruct* Message::parseToMessageStruct(char * buffer)
 		delete messStruct;
 		return NULL;
 	}
-
+	
 	// retrive the values
 	messStruct->performative = root[0];
 	messStruct->sender = root[1];

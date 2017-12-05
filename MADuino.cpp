@@ -72,7 +72,7 @@ void MADuino::createMessage(performative performative, char * content, char *rec
 void MADuino::createMessageToAll(performative performative, char * content)
 {
 	basicMessageFill(performative, content);
-	messageToBeSent->reciver = &all;
+	messageToBeSent->reciver = all;
 	messageToBeSent->inReplyTo = &empty;
 	messageToBeSent->conversationId = sendConversationId;
 }
@@ -88,7 +88,7 @@ void MADuino::createReply(performative performative, char * content)
 void MADuino::createReplyToAll(performative performative, char * content)
 {
 	basicMessageFill(performative, content);
-	messageToBeSent->reciver = &all;
+	messageToBeSent->reciver = all;
 	messageToBeSent->inReplyTo = messageReceived->replyWith;
 	messageToBeSent->conversationId = messageReceived->conversationId;
 }
@@ -112,7 +112,8 @@ boolean MADuino::isMessageReceived()
 		
 		messageReceived = Message::parseToMessageStruct(buffer);
 
-		if(messageReceived->reciver == all || messageReceived->reciver == id)
+		if(	strcmp(messageReceived->reciver, all) == 0 ||
+			strcmp(messageReceived->reciver, id) == 0)
 			return true;
 	}
 

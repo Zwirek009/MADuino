@@ -12,7 +12,7 @@ void setup() {
 	proposeInitiator.agentSetup();
 	proposeInitiator.protocol = PROPOSE_INTERACTION_PROTOCOL;
 
-	Serial.print("FIPA Request Interaction Protocol example --> Agent started --> role: Initiator, id: ");
+	Serial.print("FIPA Request IP --> role: ");
 	Serial.println(proposeInitiator.id);
 	Serial.println();
 }
@@ -22,12 +22,12 @@ void loop() {
 
 	// prepare new conversation
 	proposeInitiator.newConversationSetup();
-	Serial.print("Starting new propose IP conversation --> conversationId: ");
+	Serial.print("New IP conversation --> conversationId: ");
 	Serial.println(proposeInitiator.sendConversationId);
 	Serial.println();
 
 	// PROPOSE
-	proposeInitiator.createMessage((performative)PROPOSE, "I can do something.", participantID);
+	proposeInitiator.createMessage(PROPOSE, "I can do something.", participantID);
 	proposeInitiator.sendMessage();
 	unsigned long startTime = millis();
 	boolean protocolSucces = false;
@@ -36,7 +36,7 @@ void loop() {
 	while ( (millis() - startTime) < waitForResponseMillis )
 	{
 		if (proposeInitiator.isMessageReceived() &&
-			proposeInitiator.messageReceived->inReplyTo == proposeInitiator.sendConversationId )
+			strcmp(proposeInitiator.messageReceived->inReplyTo, proposeInitiator.sendConversationId) == 0 )
 		{
 			// reponse catched
 			if(proposeInitiator.messageReceived->performative == (performative)ACCEPT_PROPOSAL)
@@ -58,7 +58,7 @@ void loop() {
 	if (!protocolSucces)
 	{
 		// TODO #58
-		Serial.println("Propper protocol response from participant not received\n");
+		Serial.println("Protocol NOK\n");
 	}
 	
 	delay(5000);

@@ -10,7 +10,7 @@ boolean acceptProposal = true;
 void setup() {
 	proposeParticipant.agentSetup();
 
-	Serial.print("FIPA Request Interaction Protocol example --> Agent started --> role: Initiator, id: ");
+	Serial.print("FIPA Request IP --> role: ");
 	Serial.println(proposeParticipant.id);
 	Serial.println();
 }
@@ -20,8 +20,9 @@ void loop() {
 
 	if ( proposeParticipant.isMessageReceived() )
     {
+      Serial.println("test");
 		// check if it is a propper propose msg
-		if( proposeParticipant.messageReceived->performative == (performative)PROPOSE &&
+		if( proposeParticipant.messageReceived->performative == PROPOSE &&
 			proposeParticipant.messageReceived->content == "I can do something." );
 		{
 			if (acceptProposal)
@@ -35,6 +36,7 @@ void loop() {
 				proposeParticipant.createReply((performative)REJECT_PROPOSAL, "DO NOT do it !!!");
 			}
 			proposeParticipant.sendMessage();
+      acceptProposal = !(acceptProposal);
 		}
 		// otherwise not propper response
 	}
