@@ -38,6 +38,8 @@ public:
 	void  createReply(performative performative, char *content);
 	void  createReplyToAll(performative performative, char *content);
 	void  sendMessage();
+	void  sendMessageAndForget();
+	void  deleteSentMessage();
 
 	boolean isMessageReceived();
 

@@ -24,7 +24,7 @@ void loop() {
 
 	// send prepaired request message
 	Serial.println("Sending request for changing led state...");
-	master.sendMessage();
+	master.sendMessageAndForget();
 
 	delay(3000);
 }

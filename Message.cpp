@@ -19,28 +19,30 @@ Message::~Message()
 	delete contents;
 }
 
-boolean Message::createAndSendJSON()
+boolean Message::createAndSendJSON(MessageStruct *cont, RF24Network *net, char buf[])
 {
-	JsonArray& array = jsonBuffer.createArray();
+	StaticJsonBuffer<200> tempJsonBuffer;
+	JsonArray& array = tempJsonBuffer.createArray();
 
-	array.add(contents->performative);
-	array.add(contents->sender);
-	array.add(contents->reciver);
-	array.add(contents->content);
-	array.add(contents->replyWith);
-	array.add(contents->replyBy);
-	array.add(contents->inReplyTo);
-	array.add(contents->language);
-	array.add(contents->ontology);
-	array.add(contents->protocol);
-	array.add(contents->conversationId);
+	array.add(cont->performative);
+	array.add(cont->sender);
+	array.add(cont->reciver);
+	array.add(cont->content);
+	array.add(cont->replyWith);
+	array.add(cont->replyBy);
+	array.add(cont->inReplyTo);
+	array.add(cont->language);
+	array.add(cont->ontology);
+	array.add(cont->protocol);
+	array.add(cont->conversationId);
 
-	char buffer[200];
-	array.printTo(buffer, sizeof(buffer));
-	Serial.println(buffer);
+	array.printTo(buf, sizeof(buf));
+	Serial.println(sizeof(buf));
+	Serial.println(buf);
 	Serial.print("Now sending...\t");
 	RF24NetworkHeader header(00);
-	boolean ok = network->multicast(header, &buffer, strlen(buffer)+1, 0);
+	Serial.println(strlen(buf)+1);
+	boolean ok = net->multicast(header, &buf, strlen(buf)+1, 0);
 
 	if (ok)
 	{
@@ -68,7 +70,7 @@ MessageStruct* Message::parseToMessageStruct(char * buffer)
 		delete messStruct;
 		return NULL;
 	}
-	
+
 	// retrive the values
 	messStruct->performative = root[0];
 	messStruct->sender = root[1];

@@ -20,23 +20,22 @@ void loop() {
 
 	if ( proposeParticipant.isMessageReceived() )
     {
-      Serial.println("test");
 		// check if it is a propper propose msg
 		if( proposeParticipant.messageReceived->performative == PROPOSE &&
-			proposeParticipant.messageReceived->content == "I can do something." );
+			strcmp(proposeParticipant.messageReceived->content, "I can do something.") == 0 )
 		{
 			if (acceptProposal)
 			{
 				Serial.println("OK, do it !!!\n");
-				proposeParticipant.createReply((performative)ACCEPT_PROPOSAL, "OK, do it !!!");
+				proposeParticipant.createReply(ACCEPT_PROPOSAL, "OK, do it !!!");
 			}
 			else
 			{
 				Serial.println("DO NOT do it !!!\n");
-				proposeParticipant.createReply((performative)REJECT_PROPOSAL, "DO NOT do it !!!");
+				proposeParticipant.createReply(REJECT_PROPOSAL, "DO NOT do it !!!");
 			}
-			proposeParticipant.sendMessage();
-      acceptProposal = !(acceptProposal);
+			proposeParticipant.sendMessageAndForget();
+      		acceptProposal = !(acceptProposal);
 		}
 		// otherwise not propper response
 	}

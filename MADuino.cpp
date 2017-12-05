@@ -93,20 +93,33 @@ void MADuino::createReplyToAll(performative performative, char * content)
 	messageToBeSent->conversationId = messageReceived->conversationId;
 }
 
+void MADuino::sendMessageAndForget()
+{
+	sendMessage();
+	deleteSentMessage();
+}
+
+void MADuino::deleteSentMessage()
+{
+	delete messageToBeSent;
+}
+
 void MADuino::sendMessage()
 {
-	Message *mess = new Message(messageToBeSent, network);
-	mess->createAndSendJSON();
-	delete mess;
+	network->update(); 
+	Message::createAndSendJSON(messageToBeSent, network, buffer);
 }
 
 boolean MADuino::isMessageReceived()
 {
+	network->update(); 
+
 	while( network->available() )
 	{
 		Serial.println("Message catched !\n");
 
 		RF24NetworkHeader header;
+		Serial.println(sizeof(buffer));
 		network->read(header, &buffer, sizeof(buffer));
 		Serial.println(buffer);
 		

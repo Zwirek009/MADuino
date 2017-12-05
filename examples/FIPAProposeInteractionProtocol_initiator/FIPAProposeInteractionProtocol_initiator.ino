@@ -35,23 +35,29 @@ void loop() {
 	// catch response
 	while ( (millis() - startTime) < waitForResponseMillis )
 	{
-		if (proposeInitiator.isMessageReceived() &&
-			strcmp(proposeInitiator.messageReceived->inReplyTo, proposeInitiator.sendConversationId) == 0 )
+		if ( proposeInitiator.isMessageReceived() &&
+			 strcmp(proposeInitiator.messageReceived->conversationId, proposeInitiator.sendConversationId) == 0 &&
+			 strcmp(proposeInitiator.messageReceived->inReplyTo, proposeInitiator.messageToBeSent->replyWith) == 0 )
 		{
 			// reponse catched
-			if(proposeInitiator.messageReceived->performative == (performative)ACCEPT_PROPOSAL)
+			if(proposeInitiator.messageReceived->performative == ACCEPT_PROPOSAL)
 			{
 				Serial.println("OK, I am doing something.\n");
 				protocolSucces = true;
 			}
-			else if (proposeInitiator.messageReceived->performative == (performative)REJECT_PROPOSAL)
+			else if (proposeInitiator.messageReceived->performative == REJECT_PROPOSAL)
 			{
 				Serial.println("OK, I will not do that.\n");
 				protocolSucces = true;
 			}
 			// otherwise not propper response
-			
+			proposeInitiator.deleteSentMessage();
 			break;
+		}
+		else
+		{
+			//Serial.println(proposeInitiator.messageToBeSent->conversationId);
+			//Serial.println(proposeInitiator.messageToBeSent->replyWith);
 		}
 	}
 

@@ -47,12 +47,12 @@ public:
 	Message(MessageStruct *cont, RF24Network *net);	// standard
 
 	// recceive message constructor
-	static MessageStruct* parseToMessageStruct(char * buffer);
+	static MessageStruct* parseToMessageStruct(char *buffer);
 
 	// basic message destructor
 	~Message();
 
-	boolean createAndSendJSON();	// method that encapsulate MessageStruct data into a JSON
+	static boolean createAndSendJSON(MessageStruct *cont, RF24Network *net, char *buffer);	// method that encapsulate MessageStruct data into a JSON
 									// and sends it using radio on pipe with pipe_address
 	
 	// scheme: lH (8 4 2 1) + rH (8 4 2 1)
@@ -61,7 +61,7 @@ public:
 	static void extractBoundedByte(byte source, byte * lH, byte * rh);
 
 private:
-	StaticJsonBuffer<200> jsonBuffer;	// for creating JSON purposes
+	//StaticJsonBuffer<200> jsonBuffer;	// for creating JSON purposes
 };
 
 #endif
