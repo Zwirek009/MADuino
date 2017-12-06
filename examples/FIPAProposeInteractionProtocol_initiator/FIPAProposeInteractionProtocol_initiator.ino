@@ -55,7 +55,6 @@ void loop() {
 
 	if (!protocolSucces)
 	{
-		// TODO #58
 		Serial.println("Protocol NOK\n");
 	}
 	
