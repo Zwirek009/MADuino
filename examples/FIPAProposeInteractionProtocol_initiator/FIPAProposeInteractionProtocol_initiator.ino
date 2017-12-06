@@ -28,7 +28,6 @@ void loop() {
 
 	// PROPOSE
 	proposeInitiator.createMessage(PROPOSE, "I can do something.", participantID);
-	proposeInitiator.sendMessage();
 	unsigned long startTime = millis();
 	boolean protocolSucces = false;
 
@@ -51,7 +50,7 @@ void loop() {
 				protocolSucces = true;
 			}
 			// otherwise not propper response
-			proposeInitiator.deleteSentMessage();
+			//proposeInitiator.deleteSentMessage();
 			break;
 		}
 		else

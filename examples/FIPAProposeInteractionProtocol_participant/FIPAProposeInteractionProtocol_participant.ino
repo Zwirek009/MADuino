@@ -34,7 +34,7 @@ void loop() {
 				Serial.println("DO NOT do it !!!\n");
 				proposeParticipant.createReply(REJECT_PROPOSAL, "DO NOT do it !!!");
 			}
-			proposeParticipant.sendMessageAndForget();
+			//proposeParticipant.sendMessage();
       		acceptProposal = !(acceptProposal);
 		}
 		// otherwise not propper response

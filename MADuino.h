@@ -10,13 +10,31 @@
 #define MADUINO_H
 
 #include "Arduino.h"
-#include "Message.h"
 #include "Enums.h"
+
+// JSON parser
+#include <ArduinoJson.h>
 
 // send device specified
 #include <SPI.h>
 #include <RF24.h>
 #include <RF24Network.h>
+
+// structure representing single Message, implements FIPA-ACL standard
+struct MessageStruct
+{
+	unsigned int performative;
+	char *sender;
+	char *reciver;
+	char *content;
+	char *replyWith;	// message ID
+	char *replyBy;	// not used
+	char *inReplyTo;
+	unsigned int language;
+	unsigned int ontology;
+	unsigned int protocol;
+	char *conversationId;
+};
 
 // class representing a single agent
 class MADuino
@@ -43,6 +61,11 @@ public:
 
 	boolean isMessageReceived();
 
+
+	MessageStruct* parseToMessageStruct();
+	boolean createAndSendJSON();	// method that encapsulate MessageStruct data into a JSON
+	// and sends it using radio on pipe with pipe_address
+
 	char id[6];		// unique agent ID --> change into GUID ?
 	char sendMessageId[6];
 	char sendConversationId[6];
@@ -61,6 +84,11 @@ public:
 
 	MessageStruct *messageToBeSent;		// using Message library
 	MessageStruct *messageReceived;		//
+
+	// scheme: lH (8 4 2 1) + rH (8 4 2 1)
+	// both arguments must be < than 16
+	static byte boundToByte(byte lH, byte rH);
+	static void extractBoundedByte(byte source, byte * lH, byte * rh);
 
 private:
 	RF24 *radio;			// specify all radio actions for radio module
