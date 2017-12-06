@@ -36,9 +36,13 @@ void loop() {
 			}
 			//proposeParticipant.sendMessage();
 			  acceptProposal = !(acceptProposal);
-			  proposeParticipant.deleteMessages();
 		}
-		// otherwise not propper response
+		else
+		{
+			Serial.println("Msg not understood... Informing about it");
+			proposeParticipant.createNotUnderstoodReply();
+		}
+		proposeParticipant.deleteMessages();
 	}
 	
 }

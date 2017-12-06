@@ -55,6 +55,7 @@ public:
 	void  createMessageToAll(performative performative, char *content);
 	void  createReply(performative performative, char *content);
 	void  createReplyToAll(performative performative, char *content);
+	void  createNotUnderstoodReply();
 	void  sendMessage();
 	void  sendMessageAndForget();
 	void  deleteSentMessage();

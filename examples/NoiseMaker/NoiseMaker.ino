@@ -43,9 +43,10 @@ void loop() {
                 Serial.println("Non-standard Response\n");
             }
             anyResponseAcquaired = true;
-			noiseMaker.deleteMessages();
-		}
+            noiseMaker.deleteReceivedMessage();
+        }
 	}
+    noiseMaker.deleteSentMessage();
 
 	if (!anyResponseAcquaired)
 	{

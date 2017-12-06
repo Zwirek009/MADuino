@@ -99,6 +99,16 @@ void MADuino::createReplyToAll(performative performative, char * content)
 	sendMessage();
 }
 
+void MADuino::createNotUnderstoodReply()
+{
+	basicMessageFill(NOT_UNDERSTOOD, messageReceived->content);
+	messageToBeSent->reciver = messageReceived->sender;
+	messageToBeSent->inReplyTo = messageReceived->replyWith;
+	messageToBeSent->conversationId = messageReceived->conversationId;
+	messageToBeSent->protocol = messageReceived->protocol;
+	sendMessage();
+}
+
 void MADuino::sendMessageAndForget()
 {
 	sendMessage();
@@ -108,11 +118,13 @@ void MADuino::sendMessageAndForget()
 void MADuino::deleteSentMessage()
 {
 	delete messageToBeSent;
+	messageToBeSent = nullptr;
 }
 
 void MADuino::deleteReceivedMessage()
 {
 	delete messageReceived;
+	messageReceived = nullptr;
 }
 
 void MADuino::deleteMessages()
@@ -136,7 +148,6 @@ boolean MADuino::isMessageReceived()
 		Serial.println("Message catched !\n");
 
 		RF24NetworkHeader header;
-		Serial.println(sizeof(buffer));
 		network->read(header, &buffer, sizeof(buffer));
 		Serial.println(buffer);
 		
@@ -158,8 +169,11 @@ boolean MADuino::isResponseReceived()
 	{
 		return true;
 	}
-	else return false;
-
+	else 
+	{
+		deleteReceivedMessage();
+		return false;
+	}
 }
 
 void MADuino::startCounting(unsigned long numOfMilis)
@@ -195,7 +209,6 @@ boolean MADuino::createAndSendJSON()
 
 	char tempBuffer[140];
 	array.printTo(tempBuffer, sizeof(tempBuffer));
-	Serial.println(sizeof(tempBuffer));
 	Serial.println(tempBuffer);
 	Serial.print("Now sending...\t");
 	RF24NetworkHeader header(00);
@@ -225,7 +238,7 @@ MessageStruct* MADuino::parseToMessageStruct()
 	if (!root.success())
 	{
 		Serial.println("ERROR: Cannot parse given buffer to JSON !");
-		delete messStruct;
+		deleteReceivedMessage();
 		return NULL;
 	}
 
