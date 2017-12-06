@@ -36,8 +36,7 @@ void loop() {
 			}
 			//proposeParticipant.sendMessage();
 			  acceptProposal = !(acceptProposal);
-			  proposeParticipant.deleteSentMessage();
-			  proposeParticipant.deleteReceivedMessage();
+			  proposeParticipant.deleteMessages();
 		}
 		// otherwise not propper response
 	}

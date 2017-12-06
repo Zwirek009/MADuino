@@ -59,6 +59,7 @@ public:
 	void  sendMessageAndForget();
 	void  deleteSentMessage();
 	void  deleteReceivedMessage();
+	void deleteMessages();
 
 	boolean isMessageReceived();
 
@@ -81,7 +82,7 @@ public:
 	ontology ontology = NO_ONTOLOGY;
 	language language = MADUINO_MINIMAL;
 
-	char buffer[200];
+	char buffer[140];
 
 	MessageStruct *messageToBeSent = nullptr;		// using Message library
 	MessageStruct *messageReceived = nullptr;		//

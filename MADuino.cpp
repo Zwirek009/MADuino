@@ -100,8 +100,7 @@ void MADuino::createReplyToAll(performative performative, char * content)
 void MADuino::sendMessageAndForget()
 {
 	sendMessage();
-	deleteSentMessage();
-	deleteReceivedMessage();
+	deleteMessages();
 }
 
 void MADuino::deleteSentMessage()
@@ -112,6 +111,12 @@ void MADuino::deleteSentMessage()
 void MADuino::deleteReceivedMessage()
 {
 	delete messageReceived;
+}
+
+void MADuino::deleteMessages()
+{
+	deleteSentMessage();
+	deleteReceivedMessage();
 }
 
 void MADuino::sendMessage()
@@ -145,7 +150,7 @@ boolean MADuino::isMessageReceived()
 
 boolean MADuino::createAndSendJSON()
 {
-	StaticJsonBuffer<200> tempJsonBuffer;
+	StaticJsonBuffer<140> tempJsonBuffer;
 	JsonArray& array = tempJsonBuffer.createArray();
 
 	array.add(messageToBeSent->performative);
@@ -160,14 +165,14 @@ boolean MADuino::createAndSendJSON()
 	array.add(messageToBeSent->protocol);
 	array.add(messageToBeSent->conversationId);
 
-	char tempbBuffer[200];
-	array.printTo(tempbBuffer, sizeof(tempbBuffer));
-	Serial.println(sizeof(tempbBuffer));
-	Serial.println(tempbBuffer);
+	char tempBuffer[140];
+	array.printTo(tempBuffer, sizeof(tempBuffer));
+	Serial.println(sizeof(tempBuffer));
+	Serial.println(tempBuffer);
 	Serial.print("Now sending...\t");
 	RF24NetworkHeader header(00);
-	Serial.println(strlen(tempbBuffer)+1);
-	boolean ok = network->multicast(header, &tempbBuffer, strlen(tempbBuffer)+1, 0);
+	Serial.println(strlen(tempBuffer)+1);
+	boolean ok = network->multicast(header, &tempBuffer, strlen(tempBuffer)+1, 0);
 
 	if (ok)
 	{
@@ -186,7 +191,7 @@ boolean MADuino::createAndSendJSON()
 MessageStruct* MADuino::parseToMessageStruct()
 {
 	MessageStruct* messStruct = new MessageStruct();
-	StaticJsonBuffer<200> tempJsonBuffer;
+	StaticJsonBuffer<140> tempJsonBuffer;
 
 	JsonArray& root = tempJsonBuffer.parseArray(buffer);
 	if (!root.success())
