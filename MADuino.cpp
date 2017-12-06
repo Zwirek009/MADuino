@@ -241,6 +241,12 @@ MessageStruct* MADuino::parseToMessageStruct()
 		deleteReceivedMessage();
 		return NULL;
 	}
+	else if (root.size() != 11)
+	{
+		Serial.println("ERROR: Received JSON is incomplete !");
+		deleteReceivedMessage();
+		return NULL;
+	}
 
 	// retrive the values
 	messStruct->performative = root[0];
