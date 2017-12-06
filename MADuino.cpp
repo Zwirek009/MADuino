@@ -162,6 +162,20 @@ boolean MADuino::isResponseReceived()
 
 }
 
+void MADuino::startCounting(unsigned long numOfMilis)
+{
+	startCountingTimespan = millis();
+	numberOfMilisToWait = numOfMilis;
+}
+
+boolean MADuino::isNotExceededTime()
+{
+	if ((unsigned long)(millis() - startCountingTimespan) < numberOfMilisToWait)
+		return true;
+	else
+		return false;
+}
+
 boolean MADuino::createAndSendJSON()
 {
 	StaticJsonBuffer<140> tempJsonBuffer;

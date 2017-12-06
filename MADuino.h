@@ -64,6 +64,11 @@ public:
 	boolean isMessageReceived();
 	boolean isResponseReceived();
 
+	// measuring time connected variables and methods
+	unsigned long startCountingTimespan;
+	unsigned long numberOfMilisToWait;
+	void startCounting(unsigned long numOfMilis);
+	boolean isNotExceededTime();
 
 	MessageStruct* parseToMessageStruct();
 	boolean createAndSendJSON();	// method that encapsulate MessageStruct data into a JSON

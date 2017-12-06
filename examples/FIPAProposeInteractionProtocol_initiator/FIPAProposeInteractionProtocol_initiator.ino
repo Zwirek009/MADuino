@@ -6,7 +6,6 @@ RF24Network network(radio);
 MADuino proposeInitiator(&radio, &network, "INIT");
 
 char 			participantID[] = "PART";
-unsigned long 	waitForResponseMillis = 10000;
 
 void setup() {
 	proposeInitiator.agentSetup();
@@ -28,11 +27,12 @@ void loop() {
 
 	// PROPOSE
 	proposeInitiator.createMessage(PROPOSE, "I can do something.", participantID);
-	unsigned long startTime = millis();
+	proposeInitiator.startCounting(10000);
+
 	boolean protocolSucces = false;
 
 	// catch response
-	while ( (millis() - startTime) < waitForResponseMillis )
+	while ( proposeInitiator.isNotExceededTime() )
 	{
 		if ( proposeInitiator.isResponseReceived() )
 		{
