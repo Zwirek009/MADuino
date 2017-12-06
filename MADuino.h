@@ -59,9 +59,10 @@ public:
 	void  sendMessageAndForget();
 	void  deleteSentMessage();
 	void  deleteReceivedMessage();
-	void deleteMessages();
+	void  deleteMessages();
 
 	boolean isMessageReceived();
+	boolean isResponseReceived();
 
 
 	MessageStruct* parseToMessageStruct();

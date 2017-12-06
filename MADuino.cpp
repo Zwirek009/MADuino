@@ -150,6 +150,18 @@ boolean MADuino::isMessageReceived()
 	return false;
 }
 
+boolean MADuino::isResponseReceived()
+{
+	if ( isMessageReceived() &&
+		 strcmp(messageReceived->conversationId, sendConversationId) == 0 &&
+		 strcmp(messageReceived->inReplyTo, messageToBeSent->replyWith) == 0 )
+	{
+		return true;
+	}
+	else return false;
+
+}
+
 boolean MADuino::createAndSendJSON()
 {
 	StaticJsonBuffer<140> tempJsonBuffer;

@@ -34,9 +34,7 @@ void loop() {
 	// catch response
 	while ( (millis() - startTime) < waitForResponseMillis )
 	{
-		if ( proposeInitiator.isMessageReceived() &&
-			 strcmp(proposeInitiator.messageReceived->conversationId, proposeInitiator.sendConversationId) == 0 &&
-			 strcmp(proposeInitiator.messageReceived->inReplyTo, proposeInitiator.messageToBeSent->replyWith) == 0 )
+		if ( proposeInitiator.isResponseReceived() )
 		{
 			// reponse catched
 			if(proposeInitiator.messageReceived->performative == ACCEPT_PROPOSAL)
@@ -52,11 +50,6 @@ void loop() {
 			// otherwise not propper response
 			proposeInitiator.deleteMessages();
 			break;
-		}
-		else
-		{
-			//Serial.println(proposeInitiator.messageToBeSent->conversationId);
-			//Serial.println(proposeInitiator.messageToBeSent->replyWith);
 		}
 	}
 
