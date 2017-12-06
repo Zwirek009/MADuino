@@ -85,6 +85,7 @@ void MADuino::createReply(performative performative, char * content)
 	messageToBeSent->reciver = messageReceived->sender;
 	messageToBeSent->inReplyTo = messageReceived->replyWith;
 	messageToBeSent->conversationId = messageReceived->conversationId;
+	messageToBeSent->protocol = messageReceived->protocol;
 	sendMessage();
 }
 
@@ -94,6 +95,7 @@ void MADuino::createReplyToAll(performative performative, char * content)
 	messageToBeSent->reciver = all;
 	messageToBeSent->inReplyTo = messageReceived->replyWith;
 	messageToBeSent->conversationId = messageReceived->conversationId;
+	messageToBeSent->protocol = messageReceived->protocol;
 	sendMessage();
 }
 
