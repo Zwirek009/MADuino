@@ -58,6 +58,7 @@ public:
 	void  sendMessage();
 	void  sendMessageAndForget();
 	void  deleteSentMessage();
+	void  deleteReceivedMessage();
 
 	boolean isMessageReceived();
 
@@ -82,8 +83,8 @@ public:
 
 	char buffer[200];
 
-	MessageStruct *messageToBeSent;		// using Message library
-	MessageStruct *messageReceived;		//
+	MessageStruct *messageToBeSent = nullptr;		// using Message library
+	MessageStruct *messageReceived = nullptr;		//
 
 	// scheme: lH (8 4 2 1) + rH (8 4 2 1)
 	// both arguments must be < than 16

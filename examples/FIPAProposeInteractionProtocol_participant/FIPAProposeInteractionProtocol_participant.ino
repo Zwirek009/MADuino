@@ -35,7 +35,9 @@ void loop() {
 				proposeParticipant.createReply(REJECT_PROPOSAL, "DO NOT do it !!!");
 			}
 			//proposeParticipant.sendMessage();
-      		acceptProposal = !(acceptProposal);
+			  acceptProposal = !(acceptProposal);
+			  proposeParticipant.deleteSentMessage();
+			  proposeParticipant.deleteReceivedMessage();
 		}
 		// otherwise not propper response
 	}

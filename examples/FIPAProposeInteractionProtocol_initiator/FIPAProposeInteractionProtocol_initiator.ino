@@ -50,7 +50,8 @@ void loop() {
 				protocolSucces = true;
 			}
 			// otherwise not propper response
-			//proposeInitiator.deleteSentMessage();
+			proposeInitiator.deleteSentMessage();
+			proposeInitiator.deleteReceivedMessage();
 			break;
 		}
 		else

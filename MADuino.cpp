@@ -85,29 +85,6 @@ void MADuino::createReply(performative performative, char * content)
 	messageToBeSent->reciver = messageReceived->sender;
 	messageToBeSent->inReplyTo = messageReceived->replyWith;
 	messageToBeSent->conversationId = messageReceived->conversationId;
-	Serial.print("performative: ");
-	Serial.println(messageToBeSent->performative);
-	Serial.print("sender: ");
-	Serial.println(messageToBeSent->sender);
-	Serial.print("reciver: ");
-	Serial.println(messageToBeSent->reciver);
-	Serial.print("content: ");
-	Serial.println(messageToBeSent->content);
-	Serial.print("replyWith: ");
-	Serial.println(messageToBeSent->replyWith);
-	Serial.print("replyBy: ");
-	Serial.println(messageToBeSent->replyBy);
-	Serial.print("inReplyTo: ");
-	Serial.println(messageToBeSent->inReplyTo);
-	Serial.print("language: ");
-	Serial.println(messageToBeSent->language);
-	Serial.print("ontology: ");
-	Serial.println(messageToBeSent->ontology);
-	Serial.print("protocol: ");
-	Serial.println(messageToBeSent->protocol);
-	Serial.print("conversationId: ");
-	Serial.println(messageToBeSent->conversationId);
-	Serial.println();
 	sendMessage();
 }
 
@@ -124,11 +101,17 @@ void MADuino::sendMessageAndForget()
 {
 	sendMessage();
 	deleteSentMessage();
+	deleteReceivedMessage();
 }
 
 void MADuino::deleteSentMessage()
 {
 	delete messageToBeSent;
+}
+
+void MADuino::deleteReceivedMessage()
+{
+	delete messageReceived;
 }
 
 void MADuino::sendMessage()
