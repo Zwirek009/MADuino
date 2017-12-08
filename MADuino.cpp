@@ -48,8 +48,9 @@ void MADuino::newConversationSetup()
 	createId(sendConversationId);
 }
 
-void MADuino::basicMessageFill(performative performative, char *content)
+void MADuino::basicMessageFill(performative performative, char * content, boolean newMsgId = true)
 {
+	if (newMsgId) createId(sendMessageId);
 	messageToBeSent = new MessageStruct();	
 	messageToBeSent->performative = (unsigned int)performative;
 	messageToBeSent->content = content;
@@ -57,7 +58,7 @@ void MADuino::basicMessageFill(performative performative, char *content)
 	messageToBeSent->language = language;
 	messageToBeSent->ontology = ontology;
 	messageToBeSent->protocol = protocol;
-	messageToBeSent->replyWith = createId(sendMessageId);
+	messageToBeSent->replyWith = sendMessageId;
 	messageToBeSent->replyBy = &empty;
 }
 
@@ -106,6 +107,16 @@ void MADuino::createNotUnderstoodReply()
 	messageToBeSent->inReplyTo = messageReceived->replyWith;
 	messageToBeSent->conversationId = messageReceived->conversationId;
 	messageToBeSent->protocol = messageReceived->protocol;
+	sendMessage();
+}
+
+void MADuino::cancelProtocol(char * content, char *reciver)
+{
+	basicMessageFill(CANCEL, content, false);
+	messageToBeSent->reciver = reciver;
+	messageToBeSent->inReplyTo = sendMessageId;
+	messageToBeSent->replyWith = createId(tempMessageId);
+	messageToBeSent->conversationId = sendConversationId;
 	sendMessage();
 }
 
@@ -174,6 +185,40 @@ boolean MADuino::isResponseReceived()
 		deleteReceivedMessage();
 		return false;
 	}
+}
+
+void MADuino::storeSentCommunicativeAct()
+{
+	Serial.println("storeSentCommAct(): ");
+	memcpy(sendMessageId, messageToBeSent->sender, strlen(messageToBeSent->sender));
+	Serial.println(sendMessageId);
+	memcpy(sendConversationId, messageToBeSent->conversationId, strlen(messageToBeSent->conversationId));
+	Serial.println(sendConversationId);
+	Serial.println();
+}
+
+void MADuino::storeReceivedCommunicativeAct()
+{
+	Serial.println("storeReceivedCommAct(): ");
+	memcpy(receiveId, messageReceived->sender, strlen(messageReceived->sender));
+	Serial.println(receiveId);
+	memcpy(receiveMessageId, messageReceived->replyWith, strlen(messageReceived->replyWith));
+	Serial.println(receiveMessageId);
+	memcpy(receiveConversationId, messageReceived->conversationId, strlen(messageReceived->conversationId));
+	Serial.println(receiveConversationId);
+	Serial.println();
+}
+
+void MADuino::retreiveReceivedCommunicativeAct()
+{
+	Serial.println("retreiveReceivedCommAct(): ");
+	messageReceived->sender = receiveId;
+	Serial.println(messageReceived->sender);
+	messageReceived->replyWith = receiveMessageId;
+	Serial.println(messageReceived->replyWith);
+	messageReceived->conversationId = receiveConversationId;
+	Serial.println(messageReceived->conversationId);
+	Serial.println();
 }
 
 void MADuino::startCounting(unsigned long numOfMilis)

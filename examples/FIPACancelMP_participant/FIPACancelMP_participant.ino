@@ -5,7 +5,7 @@ RF24Network network(radio);
 
 MADuino proposeParticipant(&radio, &network, "PART");
 
-boolean acceptProposal = true;
+boolean cancelOK = true;
 
 void setup() {
 	proposeParticipant.agentSetup();
@@ -24,18 +24,40 @@ void loop() {
 		if( proposeParticipant.messageReceived->performative == PROPOSE &&
 			strcmp(proposeParticipant.messageReceived->content, "I can do something.") == 0 )
 		{
-			if (acceptProposal)
+			proposeParticipant.storeReceivedCommunicativeAct();
+
+			boolean cancelReceived = false;
+
+			proposeParticipant.startCounting(5000);
+			while ( proposeParticipant.isNotExceededTime() )
+			{
+				if ( proposeParticipant.isMessageReceived() )
+				{
+					if (proposeParticipant.messageReceived->performative == CANCEL &&
+						strcmp(proposeParticipant.messageReceived->inReplyTo, proposeParticipant.receiveMessageId) == 0 &&
+						strcmp(proposeParticipant.messageReceived->sender, proposeParticipant.receiveId) == 0 &&
+						strcmp(proposeParticipant.messageReceived->conversationId, proposeParticipant.receiveConversationId) == 0)
+					{
+						// cancel received
+						if (cancelOK)
+						{
+							proposeParticipant.createReply(INFORM, "done");
+						}
+						else
+						{
+							proposeParticipant.createReply(FAILURE, "error");
+						}
+						cancelOK = !(cancelOK);
+						cancelReceived = true;
+					}
+				}
+			}
+
+			if (!cancelReceived)
 			{
 				Serial.println("OK, do it !!!\n");
 				proposeParticipant.createReply(ACCEPT_PROPOSAL, "OK, do it !!!");
 			}
-			else
-			{
-				Serial.println("DO NOT do it !!!\n");
-				proposeParticipant.createReply(REJECT_PROPOSAL, "DO NOT do it !!!");
-			}
-			//proposeParticipant.sendMessage();
-			  acceptProposal = !(acceptProposal);
 		}
 		else
 		{

@@ -65,6 +65,12 @@ public:
 	boolean isMessageReceived();
 	boolean isResponseReceived();
 
+	void cancelProtocol(char * content, char *reciver);
+
+	void storeSentCommunicativeAct();
+	void storeReceivedCommunicativeAct();
+	void retreiveReceivedCommunicativeAct();
+
 	// measuring time connected variables and methods
 	unsigned long startCountingTimespan;
 	unsigned long numberOfMilisToWait;
@@ -75,13 +81,16 @@ public:
 	boolean createAndSendJSON();	// method that encapsulate MessageStruct data into a JSON
 	// and sends it using radio on pipe with pipe_address
 
-	char id[6];		// unique agent ID --> change into GUID ?
+	char id[6];
 	char sendMessageId[6];
 	char sendConversationId[6];
 
-	char receiveId[6];		// unique agent ID --> change into GUID ?
+	char tempMessageId[6];
+
+	char receiveId[6];
 	char receiveMessageId[6];
 	char receiveConversationId[6];
+
 	char empty = '\0';
 	char all[2] = {'*','\0'};
 
@@ -109,7 +118,7 @@ private:
 	const uint8_t channel = 90;	// RF24Network default
 	bool randomId = true;
 
-	void basicMessageFill(performative performative, char *content);
+	void basicMessageFill(performative performative, char *content, boolean newMsgId = true);
 };
 
 #endif

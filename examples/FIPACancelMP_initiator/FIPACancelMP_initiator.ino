@@ -23,7 +23,7 @@ void loop() {
 	// prepare new conversation
     proposeInitiator.newConversationSetup();
     boolean protocolSucces = false;
-	Serial.print("New IP Cancel conv --> conversationId: ");
+	Serial.print("||| New IP Cancel conv --> conversationId: ");
 	Serial.println(proposeInitiator.sendConversationId);
 	Serial.println();
 
@@ -48,7 +48,7 @@ void loop() {
             }
         }
         
-        proposeInitiator.cancelProtocol();
+        proposeInitiator.cancelProtocol("", participantID);
 
         proposeInitiator.startCounting(8000);
         while ( proposeInitiator.isNotExceededTime() )
@@ -75,6 +75,7 @@ void loop() {
     }
     else
     {
+        // classic fipa propose ip
         proposeInitiator.startCounting(10000);
         
             // catch response
@@ -100,9 +101,13 @@ void loop() {
             }
     }
 
-    if (!protocolSucces)
+    if (protocolSucces)
     {
-        Serial.println("Protocol NOK\n");
+        Serial.println("||| Cancel conv OK\n");
+    }
+    else
+    {
+        Serial.println("||| Cancel conv NOK\n");
     }
 
     cancelProtocol = !(cancelProtocol);
