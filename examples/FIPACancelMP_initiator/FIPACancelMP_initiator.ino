@@ -1,6 +1,6 @@
 #include <MADuino.h>
 
-RF24 radio(9,10);
+RF24 radio(8,9);
 RF24Network network(radio);
 
 MADuino proposeInitiator(&radio, &network, "INIT");
