@@ -6,9 +6,9 @@
 
 enum color
 {
-    GREEN,
-    RED,
-    YELLOW
+    GREEN = 5,
+    RED = 6,
+    YELLOW = 7
 };
 
 RF24 radio(8,9);
@@ -23,8 +23,7 @@ color currentColor;
 void setup() 
 {
     agent.agentSetup();
-    declareOutputLeds();
-    lightOnAvailableColors();
+    setupLeds();
 
     Serial.print("### ABPAlgorithm --> id: ");
     Serial.print(agent.id);
@@ -38,19 +37,13 @@ void loop()
     agent.onLoopStart();
 }
 
-void declareOutputLeds()
+void setupLeds()
 {
     // declare connected Leds
-    pinMode(2, OUTPUT);
-    pinMode(3, OUTPUT);
-    pinMode(4, OUTPUT);
-    
-    pinMode(5, OUTPUT);
-    pinMode(6, OUTPUT);
-    pinMode(7, OUTPUT);
-}
+    for (int i = 2; i < 8; ++i)
+        pinMode(i, OUTPUT);
 
-void lightOnAvailableColors()
-{
-
+    // light on available colors
+    for (int i = 0; i < NUM_OF_AVAILABLE_COLORS; ++i)
+        digitalWrite(availableColors[i] - 3, HIGH);
 }
