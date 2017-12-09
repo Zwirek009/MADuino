@@ -14,17 +14,17 @@ void loop() {
 	
 	byte first, second, third, fl, fr, sl, sr, tl, tr;
 
-	first = Message::boundToByte(15, 15);
-	second = Message::boundToByte(0, 0);
-	third = Message::boundToByte(B1001, B0110);
+	first = MADuino::boundToByte(15, 15);
+	second = MADuino::boundToByte(0, 0);
+	third = MADuino::boundToByte(B1001, B0110);
 
-	Serial.println(Message::boundToByte(15, 15)); 		// 255
-	Serial.println(Message::boundToByte(0, 0)); 		// 0
-	Serial.println(Message::boundToByte(B1001, B0110)); // 150
+	Serial.println(MADuino::boundToByte(15, 15)); 		// 255
+	Serial.println(MADuino::boundToByte(0, 0)); 		// 0
+	Serial.println(MADuino::boundToByte(B1001, B0110)); // 150
 
-	Message::extractBoundedByte(first, &fl, &fr);   // 15 15
-	Message::extractBoundedByte(second, &sl, &sr);  // 0 0
-	Message::extractBoundedByte(third, &tl, &tr);   // 9 6
+	MADuino::extractBoundedByte(first, &fl, &fr);   // 15 15
+	MADuino::extractBoundedByte(second, &sl, &sr);  // 0 0
+	MADuino::extractBoundedByte(third, &tl, &tr);   // 9 6
 
 	Serial.println(fl);                                 // 15
 	Serial.println(fr);                                 // 15
