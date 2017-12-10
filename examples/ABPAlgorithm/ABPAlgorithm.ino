@@ -24,6 +24,7 @@ void setup()
 {
     agent.agentSetup();
     setupLeds();
+    chooseInitColor();
 
     Serial.print("### ABPAlgorithm --> id: ");
     Serial.print(agent.id);
@@ -46,4 +47,20 @@ void setupLeds()
     // light on available colors
     for (int i = 0; i < NUM_OF_AVAILABLE_COLORS; ++i)
         digitalWrite(availableColors[i] - 3, HIGH);
+}
+
+void chooseInitColor()
+{
+    // random color choose from availableColors
+    currentColor = availableColors[(int)random(0,NUM_OF_AVAILABLE_COLORS)];
+
+    refreshCurrentColor();
+}
+
+void refreshCurrentColor()
+{
+    for (int i = 5; i < 8; ++i)
+        digitalWrite(i, LOW);
+    
+    digitalWrite(currentColor, HIGH);
 }
