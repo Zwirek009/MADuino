@@ -20,6 +20,9 @@ color agentView[NUM_OF_AGENTS];
 color availableColors[NUM_OF_AVAILABLE_COLORS] = {GREEN, RED};
 color currentColor;
 
+char contentBuffer[20];
+char tempReciverID[2];
+
 void setup() 
 {
     agent.agentSetup();
@@ -31,11 +34,28 @@ void setup()
     Serial.println(" ###");
     Serial.println();
 
+    if (ID == 1) 
+        initMsg();
 }
 
 void loop() 
 {
     agent.onLoopStart();
+}
+
+void refreshCurrentColor()
+{
+    for (int i = 5; i < 8; ++i)
+        digitalWrite(i, LOW);
+    
+    digitalWrite(currentColor, HIGH);
+}
+
+void createOkQuestionContent()
+{
+    String temp = "ok?(" + String(ID) + ',' + String(currentColor) + ')';
+
+  temp.toCharArray(contentBuffer, 9);
 }
 
 void setupLeds()
@@ -53,14 +73,17 @@ void chooseInitColor()
 {
     // random color choose from availableColors
     currentColor = availableColors[(int)random(0,NUM_OF_AVAILABLE_COLORS)];
-
     refreshCurrentColor();
 }
 
-void refreshCurrentColor()
+void initMsg()
 {
-    for (int i = 5; i < 8; ++i)
-        digitalWrite(i, LOW);
-    
-    digitalWrite(currentColor, HIGH);
+    agent.newConversationSetup();
+    createOkQuestionContent();
+
+    for(int i = 2; i <= NUM_OF_AGENTS; ++i)
+    {
+        String(i).toCharArray(tempReciverID, 2);
+        agent.createMessage(QUERY_IF, contentBuffer, tempReciverID);
+    }
 }
