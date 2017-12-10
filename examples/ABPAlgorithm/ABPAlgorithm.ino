@@ -50,8 +50,6 @@ void refreshCurrentColor()
         digitalWrite(i, LOW);
     
     digitalWrite(currentColor, HIGH);
-
-    agentView[ID] = currentColor;
 }
 
 void createOkQuestionContent()
@@ -98,13 +96,13 @@ boolean isABPMsgReceived()
     if (agent.isMessageReceived())
     {
         String temp = String(agent.messageReceived->content);
+        agent.deleteReceivedMessage();
         if (temp.substring(0, 3) == "ok?")
         {
             reviseAgentView(temp);
-            agent.deleteReceivedMessage();
+            checkAgentView();
             return true;
         }
-        agent.deleteReceivedMessage();
     }
 
     return false;
@@ -130,4 +128,32 @@ void printAgentView()
         Serial.println(agentView[i]);
     }
     Serial.println();
+}
+
+void checkAgentView()
+{
+    if (isConsistence() == false)
+    {
+        // TODO
+    }
+}
+
+boolean isConsistence()
+{
+    for (int i = 1; i <= NUM_OF_AGENTS; ++i)
+    {   
+        if (agentView[i] != 0)
+        {
+            if (agentView[i] == currentColor)
+                return false;
+
+            for (int j = (i+1); j <= NUM_OF_AGENTS; ++j)
+            {
+                if (agentView[i] == agentView[j])
+                    return false;
+            }
+        }
+    }
+
+    return true;
 }
