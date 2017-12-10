@@ -16,7 +16,7 @@ RF24Network network(radio);
 
 MADuino agent(&radio, &network, String(ID));
 
-color agentView[NUM_OF_AGENTS];
+color agentView[NUM_OF_AGENTS+1];
 color availableColors[NUM_OF_AVAILABLE_COLORS] = {GREEN, RED};
 color currentColor;
 
@@ -50,6 +50,8 @@ void refreshCurrentColor()
         digitalWrite(i, LOW);
     
     digitalWrite(currentColor, HIGH);
+
+    agentView[ID] = currentColor;
 }
 
 void createOkQuestionContent()
@@ -112,4 +114,20 @@ void processOkQuestion(String questionContent)
 {
     Serial.print("Cached ok? question --> ");
     Serial.println(questionContent);
+
+    agentView[questionContent[4] - '0'] = (color)(questionContent[6] - '0');
+    
+    printAgentView();
+}
+
+void printAgentView()
+{
+    Serial.println("Current agent view: id color");
+    for (int i = 1; i <= NUM_OF_AGENTS; ++i)
+    {
+        Serial.print(i);
+        Serial.print(" - ");
+        Serial.println(agentView[i]);
+    }
+    Serial.println();
 }
