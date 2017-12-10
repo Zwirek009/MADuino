@@ -41,6 +41,7 @@ void setup()
 void loop() 
 {
     agent.onLoopStart();
+    isABPMsgReceived();
 }
 
 void refreshCurrentColor()
@@ -79,11 +80,36 @@ void chooseInitColor()
 void initMsg()
 {
     agent.newConversationSetup();
+    agent.onLoopStart();
     createOkQuestionContent();
 
     for(int i = 2; i <= NUM_OF_AGENTS; ++i)
     {
         String(i).toCharArray(tempReciverID, 2);
         agent.createMessage(QUERY_IF, contentBuffer, tempReciverID);
+        agent.deleteSentMessage();
     }
+}
+
+boolean isABPMsgReceived()
+{
+    if (agent.isMessageReceived())
+    {
+        String temp = String(agent.messageReceived->content);
+        if (temp.substring(0, 3) == "ok?")
+        {
+            processOkQuestion(temp);
+            agent.deleteReceivedMessage();
+            return true;
+        }
+        agent.deleteReceivedMessage();
+    }
+
+    return false;
+}
+
+void processOkQuestion(String questionContent)
+{
+    Serial.print("Cached ok? question --> ");
+    Serial.println(questionContent);
 }
