@@ -132,19 +132,20 @@ void printAgentView()
 
 void checkAgentView()
 {
-    if (isConsistence() == false)
+    if (isConsistence(currentColor) == false)
     {
+        int tempColor = isConsistentColorAvailable();
         // TODO
     }
 }
 
-boolean isConsistence()
+boolean isConsistence(color color)
 {
     for (int i = 1; i <= NUM_OF_AGENTS; ++i)
     {   
         if (agentView[i] != 0)
         {
-            if (agentView[i] == currentColor)
+            if (agentView[i] == color)
                 return false;
 
             for (int j = (i+1); j <= NUM_OF_AGENTS; ++j)
@@ -156,4 +157,15 @@ boolean isConsistence()
     }
 
     return true;
+}
+
+int isConsistentColorAvailable()
+{
+    for(int i = 0; i < NUM_OF_AVAILABLE_COLORS; ++i)
+    {
+        if (isConsistence(availableColors[i]) == true)
+            return availableColors[i];
+    }
+
+    return 0;
 }
