@@ -100,7 +100,7 @@ boolean isABPMsgReceived()
         String temp = String(agent.messageReceived->content);
         if (temp.substring(0, 3) == "ok?")
         {
-            processOkQuestion(temp);
+            reviseAgentView(temp);
             agent.deleteReceivedMessage();
             return true;
         }
@@ -110,7 +110,7 @@ boolean isABPMsgReceived()
     return false;
 }
 
-void processOkQuestion(String questionContent)
+void reviseAgentView(String questionContent)
 {
     Serial.print("Cached ok? question --> ");
     Serial.println(questionContent);
