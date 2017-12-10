@@ -35,7 +35,7 @@ void setup()
     Serial.println();
 
     if (ID == 1) 
-        initMsg();
+        createAndSendOkQuestion();
 }
 
 void loop() 
@@ -77,7 +77,7 @@ void chooseInitColor()
     refreshCurrentColor();
 }
 
-void initMsg()
+void createAndSendOkQuestion()
 {
     agent.newConversationSetup();
     agent.onLoopStart();
@@ -135,7 +135,18 @@ void checkAgentView()
     if (isConsistence(currentColor) == false)
     {
         int tempColor = isConsistentColorAvailable();
-        // TODO
+
+        if (tempColor == 0)
+        {
+            // TODO backtrack
+        }
+        else
+        {
+            currentColor = tempColor;
+            refreshCurrentColor();
+            createAndSendOkQuestion();
+        }
+
     }
 }
 
