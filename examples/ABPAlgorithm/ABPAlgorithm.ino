@@ -54,9 +54,9 @@ void refreshCurrentColor()
 
 void createOkQuestionContent()
 {
-    String temp = "ok?(" + String(ID) + ',' + String(currentColor) + ')';
+    String temp = "ok?,(" + String(ID) + ',' + String(currentColor) + ')';
 
-  temp.toCharArray(contentBuffer, 9);
+  temp.toCharArray(contentBuffer, 10);
 }
 
 void setupLeds()
@@ -103,6 +103,10 @@ boolean isABPMsgReceived()
             checkAgentView();
             return true;
         }
+        else if (temp.substring(0, 6) == "nogood")
+        {
+            // TODO received noogood processing
+        }
     }
 
     return false;
@@ -113,7 +117,7 @@ void reviseAgentView(String questionContent)
     Serial.print("Cached ok? question --> ");
     Serial.println(questionContent);
 
-    agentView[questionContent[4] - '0'] = (color)(questionContent[6] - '0');
+    agentView[questionContent[5] - '0'] = (color)(questionContent[7] - '0');
     
     printAgentView();
 }
