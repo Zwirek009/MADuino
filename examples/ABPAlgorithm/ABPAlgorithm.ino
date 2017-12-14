@@ -55,8 +55,35 @@ void refreshCurrentColor()
 void createOkQuestionContent()
 {
     String temp = "ok?,(" + String(ID) + ',' + String(currentColor) + ')';
+    temp.toCharArray(contentBuffer, temp.length()+1);
+}
 
-  temp.toCharArray(contentBuffer, 10);
+void createNogoodContent()
+{
+    String temp = "nogood,({" + agentViewToString() + "})";
+    temp.toCharArray(contentBuffer, temp.length()+1);
+}
+
+String agentViewToString()
+{
+    String agentViewString = "";
+
+    for (int i = 1; i <= NUM_OF_AGENTS; ++i)
+    {
+        if(agentView[i] != 0)
+        {
+            if (agentViewString != "")
+                agentViewString += ',';
+            agentViewString += '(' + String(i) + ',' + String(agentView[i]) + ')';
+        }
+    }
+
+    return agentViewString;
+}
+
+void createTerminateContent()
+{
+    // TODO
 }
 
 void setupLeds()
@@ -91,6 +118,15 @@ void createAndSendOkQuestion()
     }
 }
 
+void createAndSendNogood()
+{
+    agent.newConversationSetup();
+    agent.onLoopStart();
+    createNogoodContent();
+
+    // TODO send to higher priorty agent
+}
+
 boolean isABPMsgReceived()
 {
     if (agent.isMessageReceived())
@@ -106,6 +142,10 @@ boolean isABPMsgReceived()
         else if (temp.substring(0, 6) == "nogood")
         {
             // TODO received noogood processing
+        }
+        else if (temp.substring(0,9) == "terminate")
+        {
+            // TODO terminate algorithm
         }
     }
 
@@ -142,7 +182,7 @@ void checkAgentView()
 
         if (tempColor == 0)
         {
-            // TODO backtrack
+            backtrack();
         }
         else
         {
@@ -152,6 +192,11 @@ void checkAgentView()
         }
 
     }
+}
+
+void backtrack()
+{
+    // TODO
 }
 
 boolean isConsistence(color color)
