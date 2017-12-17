@@ -168,7 +168,7 @@ boolean MADuino::isMessageReceived()
 			strcmp(messageReceived->reciver, id) == 0)
 			return true;
 	}
-
+	deleteReceivedMessage();
 	return false;
 }
 
@@ -283,14 +283,16 @@ MessageStruct* MADuino::parseToMessageStruct()
 	if (!root.success())
 	{
 		Serial.println("ERROR: Cannot parse given buffer to JSON !");
+		delete messStruct;
 		deleteReceivedMessage();
-		return NULL;
+		return nullptr;
 	}
 	else if (root.size() != 11)
 	{
 		Serial.println("ERROR: Received JSON is incomplete !");
+		delete messStruct;
 		deleteReceivedMessage();
-		return NULL;
+		return nullptr;
 	}
 
 	// retrive the values

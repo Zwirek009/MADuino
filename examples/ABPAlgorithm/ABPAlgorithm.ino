@@ -1,4 +1,5 @@
 #include <MADuino.h>
+#include <MemoryUsage.h>
 
 #define ID                      1
 #define NUM_OF_AGENTS           2
@@ -40,6 +41,7 @@ void setup()
 
 void loop() 
 {
+    //FREERAM_PRINT;
     agent.onLoopStart();
     isABPMsgReceived();
 }
@@ -143,12 +145,11 @@ boolean isABPMsgReceived()
         {
             // TODO received noogood processing
         }
-        else if (temp.substring(0,9) == "terminate")
-        {
-            // TODO terminate algorithm
-        }
+        //else if (temp.substring(0,9) == "terminate")
+        //{
+        //    // TODO terminate algorithm
+        //}
     }
-
     return false;
 }
 
