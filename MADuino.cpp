@@ -252,14 +252,16 @@ boolean MADuino::createAndSendJSON()
 	array.add(messageToBeSent->protocol);
 	array.add(messageToBeSent->conversationId);
 
+	FREERAM_PRINT;
 	char tempBuffer[140];
 	array.printTo(tempBuffer, sizeof(tempBuffer));
 	Serial.println(tempBuffer);
 	Serial.print("Now sending...\t");
 	RF24NetworkHeader header(00);
 	Serial.println(strlen(tempBuffer)+1);
+	FREERAM_PRINT;
 	boolean ok = network->multicast(header, &tempBuffer, strlen(tempBuffer)+1, 0);
-
+	FREERAM_PRINT;
 	if (ok)
 	{
 		Serial.println("Sent message.");

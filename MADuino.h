@@ -20,6 +20,8 @@
 #include <RF24.h>
 #include <RF24Network.h>
 
+#include <MemoryUsage.h>
+
 // structure representing single Message, implements FIPA-ACL standard
 struct MessageStruct
 {

@@ -1,5 +1,4 @@
 #include <MADuino.h>
-#include <MemoryUsage.h>
 
 #define ID                      1
 #define NUM_OF_AGENTS           2
@@ -21,8 +20,10 @@ color agentView[NUM_OF_AGENTS+1];
 color availableColors[NUM_OF_AVAILABLE_COLORS] = {GREEN, RED};
 color currentColor;
 
-char contentBuffer[20];
+char contentBuffer[30];
 char tempReciverID[2];
+
+boolean terminate = false;
 
 void setup() 
 {
@@ -41,9 +42,8 @@ void setup()
 
 void loop() 
 {
-    //FREERAM_PRINT;
     agent.onLoopStart();
-    isABPMsgReceived();
+    if (terminate != true) isABPMsgReceived();
 }
 
 void refreshCurrentColor()
@@ -118,29 +118,33 @@ void createAndSendOkQuestion()
     agent.onLoopStart();
     createOkQuestionContent();
 
-    for(int i = 2; i <= NUM_OF_AGENTS; ++i)
+    for(int i = 1; i <= NUM_OF_AGENTS; ++i)
     {
-        String(i).toCharArray(tempReciverID, 2);
-        agent.createMessage(QUERY_IF, contentBuffer, tempReciverID);
-        agent.deleteSentMessage();
+        if (i != ID)
+        {
+            String(i).toCharArray(tempReciverID, 2);
+            agent.createMessage(QUERY_IF, contentBuffer, tempReciverID);
+            agent.deleteSentMessage();
+        }
     }
 }
 
-void createAndSendNogood()
+void sendNogoodToLowestPrioityAndRemoveItFromAgentView()
 {
     agent.newConversationSetup();
     agent.onLoopStart();
-    createNogoodContent();
 
-    for(int i = NUM_OF_AGENTS; i >= 2; --i)
+    for(int i = NUM_OF_AGENTS; i >= 1; --i)
     {
         if(agentView[i] != 0)
         {
             String(i).toCharArray(tempReciverID, 2);
             agent.createMessage(INFORM, contentBuffer, tempReciverID);
             agent.deleteSentMessage();
+
+            agentView[i] = 0;
+            break;
         }
-        break;
     }
 }
 
@@ -150,11 +154,14 @@ void createAndSendTerminate()
     agent.onLoopStart();
     createTerminateContent();
 
-    for(int i = 2; i <= NUM_OF_AGENTS; ++i)
+    for(int i = 1; i <= NUM_OF_AGENTS; ++i)
     {
-        String(i).toCharArray(tempReciverID, 2);
-        agent.createMessage(FAILURE, contentBuffer, tempReciverID);
-        agent.deleteSentMessage();
+        if (i != ID)
+        {
+            String(i).toCharArray(tempReciverID, 2);
+            agent.createMessage(FAILURE, contentBuffer, tempReciverID);
+            agent.deleteSentMessage();
+        }
     }
 }
 
@@ -226,7 +233,20 @@ void checkAgentView()
 
 void backtrack()
 {
-    // TODO
+    createNogoodContent();
+    Serial.println(contentBuffer);
+
+    if(agentViewToString() == "")
+    {
+        createAndSendTerminate();
+        turnCurrentColorLedOff();
+        terminate = true;
+    }
+    else
+    {
+        sendNogoodToLowestPrioityAndRemoveItFromAgentView();
+        //checkAgentView();
+    }
 }
 
 boolean isConsistence(color color)
