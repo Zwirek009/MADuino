@@ -62,7 +62,7 @@ void createOkQuestionContent()
 
 void createNogoodContent()
 {
-    String temp = "nogood,({" + agentViewToString() + "})";
+    String temp = "nogood,{" + agentViewToString() + "}";
     temp.toCharArray(contentBuffer, temp.length()+1);
 }
 

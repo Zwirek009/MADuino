@@ -146,8 +146,10 @@ void MADuino::deleteMessages()
 
 void MADuino::sendMessage()
 {
-	network->update(); 
+	network->update();
+	FREERAM_PRINT; 
 	createAndSendJSON();
+	FREERAM_PRINT;
 }
 
 boolean MADuino::isMessageReceived()
@@ -252,7 +254,6 @@ boolean MADuino::createAndSendJSON()
 	array.add(messageToBeSent->protocol);
 	array.add(messageToBeSent->conversationId);
 
-	FREERAM_PRINT;
 	char tempBuffer[140];
 	array.printTo(tempBuffer, sizeof(tempBuffer));
 	Serial.println(tempBuffer);
@@ -261,7 +262,7 @@ boolean MADuino::createAndSendJSON()
 	Serial.println(strlen(tempBuffer)+1);
 	FREERAM_PRINT;
 	boolean ok = network->multicast(header, &tempBuffer, strlen(tempBuffer)+1, 0);
-	FREERAM_PRINT;
+
 	if (ok)
 	{
 		Serial.println("Sent message.");
