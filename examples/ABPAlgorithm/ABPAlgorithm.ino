@@ -179,7 +179,9 @@ boolean isABPMsgReceived()
         }
         else if (temp.substring(0, 6) == "nogood")
         {
-            // TODO received noogood processing
+            // TODO parsing nogood
+            checkAgentView();
+            return true;
         }
         else if (temp.substring(0,9) == "terminate")
         {
