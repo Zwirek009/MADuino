@@ -181,10 +181,11 @@ boolean isABPMsgReceived()
         {
             // TODO received noogood processing
         }
-        //else if (temp.substring(0,9) == "terminate")
-        //{
-        //    // TODO terminate algorithm
-        //}
+        else if (temp.substring(0,9) == "terminate")
+        {
+            terminate = true;
+            return true;
+        }
     }
     return false;
 }
