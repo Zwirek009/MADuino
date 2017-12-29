@@ -245,7 +245,7 @@ void backtrack()
     else
     {
         sendNogoodToLowestPrioityAndRemoveItFromAgentView();
-        //checkAgentView();
+        checkAgentView();
     }
 }
 
