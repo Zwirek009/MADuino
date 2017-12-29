@@ -66,6 +66,12 @@ void createNogoodContent()
     temp.toCharArray(contentBuffer, temp.length()+1);
 }
 
+void createTerminateContent()
+{
+    String temp = "terminate";
+    temp.toCharArray(contentBuffer, temp.length()+1);
+}
+
 String agentViewToString()
 {
     String agentViewString = "";
@@ -83,11 +89,6 @@ String agentViewToString()
     return agentViewString;
 }
 
-void createTerminateContent()
-{
-    // TODO
-}
-
 void setupLeds()
 {
     // declare connected Leds
@@ -97,6 +98,11 @@ void setupLeds()
     // light on available colors
     for (int i = 0; i < NUM_OF_AVAILABLE_COLORS; ++i)
         digitalWrite(availableColors[i] - 3, HIGH);
+}
+
+void turnCurrentColorLedOff()
+{
+    digitalWrite(currentColor, LOW);
 }
 
 void chooseInitColor()
@@ -126,7 +132,30 @@ void createAndSendNogood()
     agent.onLoopStart();
     createNogoodContent();
 
-    // TODO send to higher priorty agent
+    for(int i = NUM_OF_AGENTS; i >= 2; --i)
+    {
+        if(agentView[i] != 0)
+        {
+            String(i).toCharArray(tempReciverID, 2);
+            agent.createMessage(INFORM, contentBuffer, tempReciverID);
+            agent.deleteSentMessage();
+        }
+        break;
+    }
+}
+
+void createAndSendTerminate()
+{
+    agent.newConversationSetup();
+    agent.onLoopStart();
+    createTerminateContent();
+
+    for(int i = 2; i <= NUM_OF_AGENTS; ++i)
+    {
+        String(i).toCharArray(tempReciverID, 2);
+        agent.createMessage(FAILURE, contentBuffer, tempReciverID);
+        agent.deleteSentMessage();
+    }
 }
 
 boolean isABPMsgReceived()
