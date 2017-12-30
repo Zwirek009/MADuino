@@ -231,10 +231,13 @@ void MADuino::startCounting(unsigned long numOfMilis)
 
 boolean MADuino::isNotExceededTime()
 {
-	if ((unsigned long)(millis() - startCountingTimespan) >= numberOfMilisToWait)
+	if (startCountingTimespan == 0 || (unsigned long)(millis() - startCountingTimespan) >= numberOfMilisToWait)
 		return false;
 	else
+	{
+		startCountingTimespan = 0;
 		return true;
+	}
 }
 
 boolean MADuino::createAndSendJSON()

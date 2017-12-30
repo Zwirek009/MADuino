@@ -74,7 +74,7 @@ public:
 	void retreiveReceivedCommunicativeAct();
 
 	// measuring time connected variables and methods
-	unsigned long startCountingTimespan;
+	unsigned long startCountingTimespan = 0;
 	unsigned long numberOfMilisToWait;
 	void startCounting(unsigned long numOfMilis);
 	boolean isNotExceededTime();
