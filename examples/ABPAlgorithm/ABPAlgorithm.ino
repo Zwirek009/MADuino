@@ -169,17 +169,18 @@ boolean isABPMsgReceived()
 {
     if (agent.isMessageReceived())
     {
+        delay(random(500));
         String temp = String(agent.messageReceived->content);
         agent.deleteReceivedMessage();
         if (temp.substring(0, 3) == "ok?")
         {
-            reviseAgentView(temp);
+            reviseAgentViewOnOkMsg(temp);
             checkAgentView();
             return true;
         }
         else if (temp.substring(0, 6) == "nogood")
         {
-            // TODO parsing nogood
+            reviseAgentViewOnNogoodMsg(temp);
             checkAgentView();
             return true;
         }
@@ -192,12 +193,29 @@ boolean isABPMsgReceived()
     return false;
 }
 
-void reviseAgentView(String questionContent)
+void reviseAgentViewOnOkMsg(String questionContent)
 {
     Serial.print("Cached ok? question --> ");
     Serial.println(questionContent);
 
     agentView[questionContent[5] - '0'] = (color)(questionContent[7] - '0');
+    
+    printAgentView();
+}
+
+void reviseAgentViewOnNogoodMsg(String questionContent)
+{
+    Serial.print("Cached nogood message");
+
+    int currentElementIndex = 8;
+
+    while (questionContent[currentElementIndex] == '(')
+    {
+        if (currentElementIndex != ID)
+        {
+            agentView[questionContent[currentElementIndex+1] - '0'] = (color)(questionContent[currentElementIndex+3] - '0');
+        }
+    }
     
     printAgentView();
 }
