@@ -18,7 +18,7 @@ MADuino agent(&radio, &network, String(ID));
 
 color agentView[NUM_OF_AGENTS+1];
 color availableColors[NUM_OF_AVAILABLE_COLORS] = {GREEN, RED};
-color currentColor;
+color currentColor = 0;
 
 char contentBuffer[30];
 char tempReciverID[2];
@@ -29,15 +29,17 @@ void setup()
 {
     agent.agentSetup();
     setupLeds();
-    chooseInitColor();
 
     Serial.print("### ABPAlgorithm --> id: ");
     Serial.print(agent.id);
     Serial.println(" ###");
     Serial.println();
 
-    if (ID == 1) 
+    if (ID == 1)
+    { 
+        chooseInitColor();
         createAndSendOkQuestion();
+    }
 }
 
 void loop() 
@@ -169,7 +171,7 @@ boolean isABPMsgReceived()
 {
     if (agent.isMessageReceived())
     {
-        delay(random(500));
+        //delay(random(500));
         String temp = String(agent.messageReceived->content);
         agent.deleteReceivedMessage();
         if (temp.substring(0, 3) == "ok?")
@@ -205,19 +207,23 @@ void reviseAgentViewOnOkMsg(String questionContent)
 
 void reviseAgentViewOnNogoodMsg(String questionContent)
 {
-    Serial.print("Cached nogood message");
+    Serial.println("Cached nogood message");
+    FREERAM_PRINT;
 
     int currentElementIndex = 8;
 
     while (questionContent[currentElementIndex] == '(')
     {
-        if (currentElementIndex != ID)
-        {
+        //if ((questionContent[currentElementIndex+1] - '0') != ID)
+        //{
             agentView[questionContent[currentElementIndex+1] - '0'] = (color)(questionContent[currentElementIndex+3] - '0');
-        }
+        //}
+        currentElementIndex += 6;
     }
-    
+
+    FREERAM_PRINT;
     printAgentView();
+    FREERAM_PRINT;
 }
 
 void printAgentView()
@@ -237,6 +243,7 @@ void checkAgentView()
     if (isConsistence(currentColor) == false)
     {
         int tempColor = isConsistentColorAvailable();
+        agentView[ID] = 0;
 
         if (tempColor == 0)
         {
@@ -257,11 +264,12 @@ void backtrack()
     createNogoodContent();
     Serial.println(contentBuffer);
 
-    if(agentViewToString() == "")
+    if(agentViewToString() == "" || ID == 1)
     {
         createAndSendTerminate();
         turnCurrentColorLedOff();
         terminate = true;
+        Serial.println("termnating");
     }
     else
     {
@@ -272,6 +280,9 @@ void backtrack()
 
 boolean isConsistence(color color)
 {
+    if (color == 0)
+        return false;
+
     for (int i = 1; i <= NUM_OF_AGENTS; ++i)
     {   
         if (agentView[i] != 0)
