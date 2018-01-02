@@ -231,11 +231,13 @@ void MADuino::startCounting(unsigned long numOfMilis)
 
 boolean MADuino::isNotExceededTime()
 {
-	if (startCountingTimespan == 0 || (unsigned long)(millis() - startCountingTimespan) >= numberOfMilisToWait)
-		return false;
-	else
+	if (startCountingTimespan != 0 && (unsigned long)(millis() - startCountingTimespan) >= numberOfMilisToWait)
 	{
 		startCountingTimespan = 0;
+		return false;
+	}
+	else
+	{
 		return true;
 	}
 }

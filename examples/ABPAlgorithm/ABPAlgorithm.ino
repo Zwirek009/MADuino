@@ -24,6 +24,7 @@ char contentBuffer[30];
 char tempReciverID[2];
 
 boolean terminate = false;
+int queued = 0; // 1 - ok?, 2 - nogood
 
 void setup() 
 {
@@ -44,8 +45,17 @@ void setup()
 
 void loop() 
 {
-    agent.onLoopStart();
-    if (terminate != true) isABPMsgReceived();
+    if (agent.isNotExceededTime())
+    {
+        if (terminate != true) isABPMsgReceived();
+    }
+    else
+    {
+        if (queued == 1) sendOkQuestion();
+        else if (queued == 2) sendNogoodToLowestPrioityAndRemoveItFromAgentView();
+
+        queued = 0;
+    }
 }
 
 void refreshCurrentColor()
@@ -127,8 +137,32 @@ void createAndSendOkQuestion()
             String(i).toCharArray(tempReciverID, 2);
             agent.createMessage(QUERY_IF, contentBuffer, tempReciverID);
             agent.deleteSentMessage();
+            delay(10);
         }
     }
+}
+
+void sendOkQuestion()
+{
+    agent.newConversationSetup();
+    agent.onLoopStart();
+
+    agent.createMessageToAll(QUERY_IF, contentBuffer);
+    agent.deleteSentMessage();
+}
+
+void queueOk()
+{
+    queued = 1;
+    long temp = random(50*ID, 1000);
+    agent.startCounting(temp);
+}
+
+void queueNogood()
+{
+    queued = 2;
+    long temp = random(50*ID, 1000);
+    agent.startCounting(temp);
 }
 
 void sendNogoodToLowestPrioityAndRemoveItFromAgentView()
@@ -148,30 +182,23 @@ void sendNogoodToLowestPrioityAndRemoveItFromAgentView()
             break;
         }
     }
+
+    checkAgentView();
 }
 
 void createAndSendTerminate()
 {
     agent.newConversationSetup();
-    agent.onLoopStart();
     createTerminateContent();
 
-    for(int i = 1; i <= NUM_OF_AGENTS; ++i)
-    {
-        if (i != ID)
-        {
-            String(i).toCharArray(tempReciverID, 2);
-            agent.createMessage(FAILURE, contentBuffer, tempReciverID);
-            agent.deleteSentMessage();
-        }
-    }
+    agent.createMessageToAll(FAILURE, contentBuffer);
+    agent.deleteSentMessage();
 }
 
 boolean isABPMsgReceived()
 {
     if (agent.isMessageReceived())
     {
-        //delay(random(500));
         String temp = String(agent.messageReceived->content);
         agent.deleteReceivedMessage();
         if (temp.substring(0, 3) == "ok?")
@@ -208,22 +235,16 @@ void reviseAgentViewOnOkMsg(String questionContent)
 void reviseAgentViewOnNogoodMsg(String questionContent)
 {
     Serial.println("Cached nogood message");
-    FREERAM_PRINT;
 
     int currentElementIndex = 8;
 
     while (questionContent[currentElementIndex] == '(')
     {
-        //if ((questionContent[currentElementIndex+1] - '0') != ID)
-        //{
-            agentView[questionContent[currentElementIndex+1] - '0'] = (color)(questionContent[currentElementIndex+3] - '0');
-        //}
+        agentView[questionContent[currentElementIndex+1] - '0'] = (color)(questionContent[currentElementIndex+3] - '0');
         currentElementIndex += 6;
     }
 
-    FREERAM_PRINT;
     printAgentView();
-    FREERAM_PRINT;
 }
 
 void printAgentView()
@@ -242,18 +263,18 @@ void checkAgentView()
 {
     if (isConsistence(currentColor) == false)
     {
-        int tempColor = isConsistentColorAvailable();
+        currentColor = isConsistentColorAvailable();
+        refreshCurrentColor();
         agentView[ID] = 0;
 
-        if (tempColor == 0)
+        if (currentColor == 0)
         {
             backtrack();
         }
         else
         {
-            currentColor = tempColor;
-            refreshCurrentColor();
-            createAndSendOkQuestion();
+            createOkQuestionContent();
+            queueOk();
         }
 
     }
@@ -273,8 +294,7 @@ void backtrack()
     }
     else
     {
-        sendNogoodToLowestPrioityAndRemoveItFromAgentView();
-        checkAgentView();
+        queueNogood();
     }
 }
 
