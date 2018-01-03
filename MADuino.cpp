@@ -147,9 +147,7 @@ void MADuino::deleteMessages()
 void MADuino::sendMessage()
 {
 	network->update();
-	FREERAM_PRINT; 
 	createAndSendJSON();
-	FREERAM_PRINT;
 }
 
 boolean MADuino::isMessageReceived()
@@ -239,6 +237,18 @@ boolean MADuino::isNotExceededTime()
 	else
 	{
 		return true;
+	}
+}
+
+unsigned long MADuino::getElapsedTime()
+{
+	if (startCountingTimespan != 0)
+	{
+		return (unsigned long)(millis() - startCountingTimespan);
+	}
+	else 
+	{
+		return 0;
 	}
 }
 

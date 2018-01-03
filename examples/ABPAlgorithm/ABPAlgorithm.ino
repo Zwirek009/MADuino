@@ -24,6 +24,8 @@ char contentBuffer[30];
 char tempReciverID[2];
 
 boolean terminate = false;
+boolean waitingForStart = true;
+
 int queued = 0; // 1 - ok?, 2 - nogood
 
 void setup() 
@@ -39,22 +41,27 @@ void setup()
     if (ID == 1)
     { 
         chooseInitColor();
+        agent.startCounting(NUM_OF_AGENTS*1000);
+        waitingForStart = false;
         createAndSendOkQuestion();
     }
 }
 
 void loop() 
 {
-    if (agent.isNotExceededTime())
-    {
-        if (terminate != true) isABPMsgReceived();
-    }
-    else
+    if ((agent.isNotExceededTime() == false || agent.startCountingTimespan == 0) && waitingForStart == false) 
+        agent.startCounting(NUM_OF_AGENTS*1000);
+
+    if (queued != 0 && agent.getElapsedTime() > ((ID-1) * 1000) && agent.getElapsedTime() < ((ID) * 1000))
     {
         if (queued == 1) sendOkQuestion();
         else if (queued == 2) sendNogoodToLowestPrioityAndRemoveItFromAgentView();
 
         queued = 0;
+    }
+    else
+    {
+        if (terminate != true) isABPMsgReceived();
     }
 }
 
@@ -154,15 +161,11 @@ void sendOkQuestion()
 void queueOk()
 {
     queued = 1;
-    long temp = random(50*ID, 1000);
-    agent.startCounting(temp);
 }
 
 void queueNogood()
 {
     queued = 2;
-    long temp = random(50*ID, 1000);
-    agent.startCounting(temp);
 }
 
 void sendNogoodToLowestPrioityAndRemoveItFromAgentView()
@@ -203,6 +206,7 @@ boolean isABPMsgReceived()
         agent.deleteReceivedMessage();
         if (temp.substring(0, 3) == "ok?")
         {
+            waitingForStart = false;
             reviseAgentViewOnOkMsg(temp);
             checkAgentView();
             return true;

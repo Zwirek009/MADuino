@@ -78,6 +78,7 @@ public:
 	unsigned long numberOfMilisToWait;
 	void startCounting(unsigned long numOfMilis);
 	boolean isNotExceededTime();
+	unsigned long getElapsedTime();
 
 	MessageStruct* parseToMessageStruct();
 	boolean createAndSendJSON();	// method that encapsulate MessageStruct data into a JSON
