@@ -24,9 +24,6 @@ char contentBuffer[30];
 char tempReciverID[2];
 
 boolean terminate = false;
-boolean waitingForStart = true;
-
-int queued = 0; // 1 - ok?, 2 - nogood
 
 void setup() 
 {
@@ -41,28 +38,13 @@ void setup()
     if (ID == 1)
     { 
         chooseInitColor();
-        agent.startCounting(NUM_OF_AGENTS*1000);
-        waitingForStart = false;
         createAndSendOkQuestion();
     }
 }
 
 void loop() 
 {
-    if ((agent.isNotExceededTime() == false || agent.startCountingTimespan == 0) && waitingForStart == false) 
-        agent.startCounting(NUM_OF_AGENTS*1000);
-
-    if (queued != 0 && agent.getElapsedTime() > ((ID-1) * 1000) && agent.getElapsedTime() < ((ID) * 1000))
-    {
-        if (queued == 1) sendOkQuestion();
-        else if (queued == 2) sendNogoodToLowestPrioityAndRemoveItFromAgentView();
-
-        queued = 0;
-    }
-    else
-    {
-        if (terminate != true) isABPMsgReceived();
-    }
+    if (terminate != true) isABPMsgReceived();
 }
 
 void refreshCurrentColor()
@@ -144,28 +126,8 @@ void createAndSendOkQuestion()
             String(i).toCharArray(tempReciverID, 2);
             agent.createMessage(QUERY_IF, contentBuffer, tempReciverID);
             agent.deleteSentMessage();
-            delay(10);
         }
     }
-}
-
-void sendOkQuestion()
-{
-    agent.newConversationSetup();
-    agent.onLoopStart();
-
-    agent.createMessageToAll(QUERY_IF, contentBuffer);
-    agent.deleteSentMessage();
-}
-
-void queueOk()
-{
-    queued = 1;
-}
-
-void queueNogood()
-{
-    queued = 2;
 }
 
 void sendNogoodToLowestPrioityAndRemoveItFromAgentView()
@@ -206,7 +168,6 @@ boolean isABPMsgReceived()
         agent.deleteReceivedMessage();
         if (temp.substring(0, 3) == "ok?")
         {
-            waitingForStart = false;
             reviseAgentViewOnOkMsg(temp);
             checkAgentView();
             return true;
@@ -277,8 +238,7 @@ void checkAgentView()
         }
         else
         {
-            createOkQuestionContent();
-            queueOk();
+            createAndSendOkQuestion();
         }
 
     }
@@ -298,7 +258,7 @@ void backtrack()
     }
     else
     {
-        queueNogood();
+        sendNogoodToLowestPrioityAndRemoveItFromAgentView();
     }
 }
 
