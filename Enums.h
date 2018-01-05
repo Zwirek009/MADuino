@@ -37,7 +37,7 @@ enum performative
 
 enum language
 {
-	MADUINO_MINIMAL // NO_LANGUAGE
+	USER_DEFINED
 };
 
 enum ontology
