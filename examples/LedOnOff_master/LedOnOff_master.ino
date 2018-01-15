@@ -5,6 +5,9 @@ RF24Network network(radio);
 
 MADuino master(&radio, &network);
 
+performative request = REQUEST;
+char content[] = "Change led state 123456781234567812345678123456789 end";
+
 void setup() {
 	master.agentSetup();
 
@@ -16,15 +19,11 @@ void setup() {
 void loop() {
 	master.onLoopStart();
 
-	performative request = REQUEST;
-	char content[] = "Change led state 123456781234567812345678123456789 end";
-
+	FREERAM_PRINT;
+	Serial.println("\nCreating and sending request for changing led state...");
 	master.newConversationSetup();
 	master.createMessageToAll(request, content);
-
-	// send prepaired request message
-	Serial.println("Sending request for changing led state...");
-	master.sendMessageAndForget();
+	master.deleteMessages();
 
 	delay(3000);
 }

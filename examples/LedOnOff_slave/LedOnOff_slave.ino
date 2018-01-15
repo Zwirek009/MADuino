@@ -29,23 +29,29 @@ void loop() {
 				Serial.println(slave.messageReceived->sender);
 				Serial.print("reciver: ");
 				Serial.println(slave.messageReceived->reciver);
+				Serial.print("reply-to: ");
+				Serial.println(slave.messageReceived->replyTo);
 				Serial.print("content: ");
 				Serial.println(slave.messageReceived->content);
-				Serial.print("replyWith: ");
-				Serial.println(slave.messageReceived->replyWith);
-				Serial.print("replyBy: ");
-				Serial.println(slave.messageReceived->replyBy);
-				Serial.print("inReplyTo: ");
-				Serial.println(slave.messageReceived->inReplyTo);
 				Serial.print("language: ");
 				Serial.println(slave.messageReceived->language);
+				Serial.print("encoding: ");
+				Serial.println(slave.messageReceived->encoding);
 				Serial.print("ontology: ");
 				Serial.println(slave.messageReceived->ontology);
 				Serial.print("protocol: ");
 				Serial.println(slave.messageReceived->protocol);
-				Serial.print("conversationId: ");
+				Serial.print("conversation-id: ");
 				Serial.println(slave.messageReceived->conversationId);
+				Serial.print("reply-with: ");
+				Serial.println(slave.messageReceived->replyWith);
+				Serial.print("in-reply-to: ");
+				Serial.println(slave.messageReceived->inReplyTo);
+				Serial.print("reply-by: ");
+				Serial.println(slave.messageReceived->replyBy);
       	Serial.println();
+				FREERAM_PRINT;
+				Serial.println();
 
       	if(slave.messageReceived->sender != 0)
       	{
