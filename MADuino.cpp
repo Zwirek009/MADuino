@@ -52,14 +52,17 @@ void MADuino::basicMessageFill(performative performative, char * content, boolea
 {
 	if (newMsgId) createId(sendMessageId);
 	messageToBeSent = new MessageStruct();	
-	messageToBeSent->performative = (unsigned int)performative;
-	messageToBeSent->content = content;
+	messageToBeSent->performative = performative;
 	messageToBeSent->sender = id;
+	messageToBeSent->replyTo = &empty;
+	messageToBeSent->content = content;
 	messageToBeSent->language = language;
+	messageToBeSent->encoding = encoding;
 	messageToBeSent->ontology = ontology;
 	messageToBeSent->protocol = protocol;
 	messageToBeSent->replyWith = sendMessageId;
 	messageToBeSent->replyBy = &empty;
+	
 }
 
 void MADuino::createMessage(performative performative, char * content, char *reciver)
@@ -156,7 +159,7 @@ boolean MADuino::isMessageReceived()
 
 	while( network->available() )
 	{
-		Serial.println("Message catched !\n");
+		Serial.println("Message catched !");
 
 		RF24NetworkHeader header;
 		network->read(header, &buffer, sizeof(buffer));
@@ -260,22 +263,24 @@ boolean MADuino::createAndSendJSON()
 	array.add(messageToBeSent->performative);
 	array.add(messageToBeSent->sender);
 	array.add(messageToBeSent->reciver);
+	array.add(messageToBeSent->replyTo);
 	array.add(messageToBeSent->content);
-	array.add(messageToBeSent->replyWith);
-	array.add(messageToBeSent->replyBy);
-	array.add(messageToBeSent->inReplyTo);
 	array.add(messageToBeSent->language);
+	array.add(messageToBeSent->encoding);
 	array.add(messageToBeSent->ontology);
 	array.add(messageToBeSent->protocol);
 	array.add(messageToBeSent->conversationId);
+	array.add(messageToBeSent->replyWith);
+	array.add(messageToBeSent->inReplyTo);
+	array.add(messageToBeSent->replyBy);
 
 	char tempBuffer[140];
+	RF24NetworkHeader header(00);
 	array.printTo(tempBuffer, sizeof(tempBuffer));
 	Serial.println(tempBuffer);
-	Serial.print("Now sending...\t");
-	RF24NetworkHeader header(00);
-	Serial.println(strlen(tempBuffer)+1);
-	FREERAM_PRINT;
+	Serial.print("Now sending\t");
+	Serial.print(strlen(tempBuffer)+1);
+	Serial.println("\tbytes...");
 	boolean ok = network->multicast(header, &tempBuffer, strlen(tempBuffer)+1, 0);
 
 	if (ok)
@@ -305,7 +310,7 @@ MessageStruct* MADuino::parseToMessageStruct()
 		deleteReceivedMessage();
 		return nullptr;
 	}
-	else if (root.size() != 11)
+	else if (root.size() != 13)
 	{
 		Serial.println("ERROR: Received JSON is incomplete !");
 		delete messStruct;
@@ -317,15 +322,17 @@ MessageStruct* MADuino::parseToMessageStruct()
 	messStruct->performative = root[0];
 	messStruct->sender = root[1];
 	messStruct->reciver = root[2];
-	messStruct->content = root[3];
-	messStruct->replyWith = root[4];
-	messStruct->replyBy = root[5];
-	messStruct->inReplyTo = root[6];
-	messStruct->language = root[7];
-	messStruct->ontology = root[8];
-	messStruct->protocol = root[9];
-	messStruct->conversationId = root[10];
-
+	messStruct->replyTo = root[3];
+	messStruct->content = root[4];
+	messStruct->language = root[5];
+	messStruct->encoding = root[6];
+	messStruct->ontology = root[7];
+	messStruct->protocol = root[8];
+	messStruct->conversationId = root[9];
+	messStruct->replyWith = root[10];
+	messStruct->inReplyTo = root[11];
+	messStruct->replyBy = root[12];
+	
 	return messStruct;
 }
 
@@ -338,14 +345,16 @@ char* MADuino::createId(char *out)
 	return out;
 }
 
-byte MADuino::boundToByte(byte lH, byte rH)
-{
-	return (B00001111 & rH) | (lH << 4);
-}
+// DEPRECATED
+//
+// byte MADuino::boundToByte(byte lH, byte rH)
+// {
+// 	return (B00001111 & rH) | (lH << 4);
+// }
 
-void MADuino::extractBoundedByte(byte source, byte * lH, byte * rH)
-{
-	*rH = B00001111 & source;
-	*lH = (B11110000 & source) >> 4;
-}
+// void MADuino::extractBoundedByte(byte source, byte * lH, byte * rH)
+// {
+// 	*rH = B00001111 & source;
+// 	*lH = (B11110000 & source) >> 4;
+// }
 

@@ -22,20 +22,21 @@
 
 #include <MemoryUsage.h>
 
-// structure representing single Message, implements FIPA-ACL standard
 struct MessageStruct
 {
 	unsigned int performative;
 	char *sender;
 	char *reciver;
+	char *replyTo;
 	char *content;
-	char *replyWith;	// message ID
-	char *replyBy;	// not used
-	char *inReplyTo;
 	unsigned int language;
+	unsigned int encoding;
 	unsigned int ontology;
 	unsigned int protocol;
 	char *conversationId;
+	char *replyWith;
+	char *inReplyTo;
+	char *replyBy;
 };
 
 // class representing a single agent
@@ -99,6 +100,7 @@ public:
 
 	protocol protocol = NO_PROTOCOL;
 	ontology ontology = NO_ONTOLOGY;
+	encoding encoding = NOT_DEFINED;
 	language language = USER_DEFINED;
 
 	char buffer[140];
@@ -106,14 +108,16 @@ public:
 	MessageStruct *messageToBeSent = nullptr;		// using Message library
 	MessageStruct *messageReceived = nullptr;		//
 
-	// scheme: lH (8 4 2 1) + rH (8 4 2 1)
-	// both arguments must be < than 16
-	static byte boundToByte(byte lH, byte rH);
-	static void extractBoundedByte(byte source, byte * lH, byte * rh);
+	// DEPRECATED
+	//
+	// // scheme: lH (8 4 2 1) + rH (8 4 2 1)
+	// // both arguments must be < than 16
+	// static byte boundToByte(byte lH, byte rH);
+	// static void extractBoundedByte(byte source, byte * lH, byte * rh);
 
 private:
 	RF24 *radio;			// specify all radio actions for radio module
-	RF24Network *network;		//
+	RF24Network *network;	//
 
 	const uint16_t node_id = 00;	// RF24Network node id, all MADuinos has the same as 
 									// message-flow on RF24Network logic level 

@@ -45,6 +45,11 @@ enum ontology
 	NO_ONTOLOGY
 };
 
+enum encoding
+{
+	NOT_DEFINED
+};
+
 enum protocol
 {
 	NO_PROTOCOL,
