@@ -56,6 +56,7 @@ void loop() {
 	if (!protocolSucces)
 	{
 		Serial.println("Protocol NOK\n");
+		proposeInitiator.deleteMessages();
 	}
 	
 	delay(5000);
