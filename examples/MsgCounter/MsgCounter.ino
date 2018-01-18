@@ -6,7 +6,7 @@ RF24Network network(radio);
 MADuino agent(&radio, &network);
 
 int buttonPin = 2;
-long numOfMsgReceived = 0;
+unsigned long numOfMsgReceived = 0;
 
 void setup() {
 	agent.agentSetup();
