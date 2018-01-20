@@ -10,8 +10,7 @@ bool slaveLedState = false;
 void setup() {
   slave.agentSetup();
 
-	// prepaire LED for signalizing message send or receive
-  pinMode(7, OUTPUT);
+  pinMode(7, OUTPUT);	// prepare LED for signalizing message send or receive
   
 	Serial.print("Agent started --> role: Slave, id: ");
 	Serial.println(slave.id);
@@ -65,8 +64,7 @@ void loop() {
       			digitalWrite(7, HIGH);
       			slaveLedState = true;
       		}
-		  }
-
-      	delete slave.messageReceived;
+		  	}
+      	slave.deleteReceivedMessage();
   	}
 }
