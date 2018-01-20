@@ -25,5 +25,5 @@ void loop() {
 	master.createMessageToAll(request, content);
 	master.deleteMessages();
 
-	delay(3000);
+	delay(3000); // wait 3 seconds and start loop() again
 }
