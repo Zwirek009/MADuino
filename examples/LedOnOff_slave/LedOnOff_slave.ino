@@ -26,8 +26,8 @@ void loop() {
 				Serial.println(slave.messageReceived->performative);
 				Serial.print("sender: ");
 				Serial.println(slave.messageReceived->sender);
-				Serial.print("reciver: ");
-				Serial.println(slave.messageReceived->reciver);
+				Serial.print("receiver: ");
+				Serial.println(slave.messageReceived->receiver);
 				Serial.print("reply-to: ");
 				Serial.println(slave.messageReceived->replyTo);
 				Serial.print("content: ");

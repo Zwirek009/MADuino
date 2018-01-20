@@ -26,7 +26,7 @@ struct MessageStruct
 {
 	unsigned int performative;
 	char *sender;
-	char *reciver;
+	char *receiver;
 	char *replyTo;
 	char *content;
 	unsigned int language;
@@ -54,7 +54,7 @@ public:
 	void  newConversationSetup();
 	char* createId(char *out);
 	void  onLoopStart();	// must be called at each program loop start, for RF24Network purposes
-	void  createMessage(performative performative, char *content, char *reciver);
+	void  createMessage(performative performative, char *content, char *receiver);
 	void  createMessageToAll(performative performative, char *content);
 	void  createReply(performative performative, char *content);
 	void  createReplyToAll(performative performative, char *content);
@@ -68,7 +68,7 @@ public:
 	boolean isMessageReceived();
 	boolean isResponseReceived();
 
-	void cancelProtocol(char * content, char *reciver);
+	void cancelProtocol(char * content, char *receiver);
 
 	void storeSentCommunicativeAct();
 	void storeReceivedCommunicativeAct();

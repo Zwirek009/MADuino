@@ -65,10 +65,10 @@ void MADuino::basicMessageFill(performative performative, char * content, boolea
 	
 }
 
-void MADuino::createMessage(performative performative, char * content, char *reciver)
+void MADuino::createMessage(performative performative, char * content, char *receiver)
 {
 	basicMessageFill(performative, content);
-	messageToBeSent->reciver = reciver;
+	messageToBeSent->receiver = receiver;
 	messageToBeSent->inReplyTo = &empty;
 	messageToBeSent->conversationId = sendConversationId;
 	sendMessage();
@@ -77,7 +77,7 @@ void MADuino::createMessage(performative performative, char * content, char *rec
 void MADuino::createMessageToAll(performative performative, char * content)
 {
 	basicMessageFill(performative, content);
-	messageToBeSent->reciver = all;
+	messageToBeSent->receiver = all;
 	messageToBeSent->inReplyTo = &empty;
 	messageToBeSent->conversationId = sendConversationId;
 	sendMessage();
@@ -86,7 +86,7 @@ void MADuino::createMessageToAll(performative performative, char * content)
 void MADuino::createReply(performative performative, char * content)
 {
 	basicMessageFill(performative, content);
-	messageToBeSent->reciver = messageReceived->sender;
+	messageToBeSent->receiver = messageReceived->sender;
 	messageToBeSent->inReplyTo = messageReceived->replyWith;
 	messageToBeSent->conversationId = messageReceived->conversationId;
 	messageToBeSent->protocol = messageReceived->protocol;
@@ -96,7 +96,7 @@ void MADuino::createReply(performative performative, char * content)
 void MADuino::createReplyToAll(performative performative, char * content)
 {
 	basicMessageFill(performative, content);
-	messageToBeSent->reciver = all;
+	messageToBeSent->receiver = all;
 	messageToBeSent->inReplyTo = messageReceived->replyWith;
 	messageToBeSent->conversationId = messageReceived->conversationId;
 	messageToBeSent->protocol = messageReceived->protocol;
@@ -106,17 +106,17 @@ void MADuino::createReplyToAll(performative performative, char * content)
 void MADuino::createNotUnderstoodReply()
 {
 	basicMessageFill(NOT_UNDERSTOOD, messageReceived->content);
-	messageToBeSent->reciver = messageReceived->sender;
+	messageToBeSent->receiver = messageReceived->sender;
 	messageToBeSent->inReplyTo = messageReceived->replyWith;
 	messageToBeSent->conversationId = messageReceived->conversationId;
 	messageToBeSent->protocol = messageReceived->protocol;
 	sendMessage();
 }
 
-void MADuino::cancelProtocol(char * content, char *reciver)
+void MADuino::cancelProtocol(char * content, char *receiver)
 {
 	basicMessageFill(CANCEL, content, false);
-	messageToBeSent->reciver = reciver;
+	messageToBeSent->receiver = receiver;
 	messageToBeSent->inReplyTo = sendMessageId;
 	messageToBeSent->replyWith = createId(tempMessageId);
 	messageToBeSent->conversationId = sendConversationId;
@@ -167,8 +167,8 @@ boolean MADuino::isMessageReceived()
 		
 		messageReceived = parseToMessageStruct();
 
-		if(	strcmp(messageReceived->reciver, all) == 0 ||
-			strcmp(messageReceived->reciver, id) == 0)
+		if(	strcmp(messageReceived->receiver, all) == 0 ||
+			strcmp(messageReceived->receiver, id) == 0)
 			return true;
 	}
 	deleteReceivedMessage();
@@ -262,7 +262,7 @@ boolean MADuino::createAndSendJSON()
 
 	array.add(messageToBeSent->performative);
 	array.add(messageToBeSent->sender);
-	array.add(messageToBeSent->reciver);
+	array.add(messageToBeSent->receiver);
 	array.add(messageToBeSent->replyTo);
 	array.add(messageToBeSent->content);
 	array.add(messageToBeSent->language);
@@ -321,7 +321,7 @@ MessageStruct* MADuino::parseToMessageStruct()
 	// retrive the values
 	messStruct->performative = root[0];
 	messStruct->sender = root[1];
-	messStruct->reciver = root[2];
+	messStruct->receiver = root[2];
 	messStruct->replyTo = root[3];
 	messStruct->content = root[4];
 	messStruct->language = root[5];
