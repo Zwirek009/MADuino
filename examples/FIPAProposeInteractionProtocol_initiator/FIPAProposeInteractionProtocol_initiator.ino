@@ -5,7 +5,7 @@ RF24Network network(radio);
 
 MADuino proposeInitiator(&radio, &network, "INIT");
 
-char 			participantID[] = "PART";
+char participantID[] = "PART";
 
 void setup() {
 	proposeInitiator.agentSetup();
