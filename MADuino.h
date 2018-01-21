@@ -74,9 +74,6 @@ public:
 	void storeReceivedCommunicativeAct();
 	void retreiveReceivedCommunicativeAct();
 
-	// measuring time connected variables and methods
-	unsigned long startCountingTimespan = 0;
-	unsigned long numberOfMilisToWait;
 	void startCounting(unsigned long numOfMilis);
 	boolean isNotExceededTime();
 	unsigned long getElapsedTime();
@@ -89,31 +86,17 @@ public:
 	char sendMessageId[6];
 	char sendConversationId[6];
 
-	char tempMessageId[6];
-
 	char receiveId[6];
 	char receiveMessageId[6];
 	char receiveConversationId[6];
-
-	char empty = '\0';
-	char all[2] = {'*','\0'};
 
 	protocol protocol = NO_PROTOCOL;
 	ontology ontology = NO_ONTOLOGY;
 	encoding encoding = NOT_DEFINED;
 	language language = USER_DEFINED;
 
-	char buffer[140];
-
 	MessageStruct *messageToBeSent = nullptr;		// using Message library
 	MessageStruct *messageReceived = nullptr;		//
-
-	// DEPRECATED
-	//
-	// // scheme: lH (8 4 2 1) + rH (8 4 2 1)
-	// // both arguments must be < than 16
-	// static byte boundToByte(byte lH, byte rH);
-	// static void extractBoundedByte(byte source, byte * lH, byte * rh);
 
 private:
 	RF24 *radio;			// specify all radio actions for radio module
@@ -126,6 +109,16 @@ private:
 	bool randomId = true;
 
 	void basicMessageFill(performative performative, char *content, boolean newMsgId = true);
+	
+	// measuring time connected variables and methods
+	unsigned long numberOfMilisToWait;
+	unsigned long startCountingTimespan = 0;
+
+	char tempMessageId[6]; // for cancelProtocol usage
+
+	char empty = '\0';
+	char all[2] = {'*','\0'};
+	char buffer[140];
 };
 
 #endif
