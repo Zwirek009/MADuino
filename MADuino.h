@@ -43,45 +43,39 @@ struct MessageStruct
 class MADuino
 {
 public:
-	void init(RF24 *rad, RF24Network *net);
-	MADuino(RF24 *rad, RF24Network *net); 		// basic constructor with random agent's id
-	MADuino(RF24 *rad, RF24Network *net, String agentId);	// constructor with own agent's
-															// ID definition
 
+	MADuino(RF24 *rad, RF24Network *net);	// constructor with generating random ID
+	MADuino(RF24 *rad, RF24Network *net, String agentId);	// constructor with custom ID
 	~MADuino() {}	// basic destructor
 
-	void  agentSetup();
-	void  newConversationSetup();
-	char* createId(char *out);
-	void  onLoopStart();	// must be called at each program loop start, for RF24Network purposes
+	void  agentSetup();				// basic MADuino setup methods
+	void  newConversationSetup();	// 
+	char* createId(char *out);		// 
+	void  onLoopStart();			// 
+
+	// sending messages
 	void  createMessage(performative performative, char *content, char *receiver);
 	void  createMessageToAll(performative performative, char *content);
 	void  createReply(performative performative, char *content);
 	void  createReplyToAll(performative performative, char *content);
 	void  createNotUnderstoodReply();
-	void  sendMessage();
-	void  sendMessageAndForget();
-	void  deleteSentMessage();
-	void  deleteReceivedMessage();
-	void  deleteMessages();
+	
+	void  deleteSentMessage();		// deleting messages
+	void  deleteReceivedMessage();	//
+	void  deleteMessages();			//
 
-	boolean isMessageReceived();
-	boolean isResponseReceived();
+	boolean isMessageReceived();	// receiving message methods
+	boolean isResponseReceived();	//
+
+	void storeSentCommunicativeAct();		// saving most important message fields
+	void storeReceivedCommunicativeAct();	//
+
+	void startCounting(unsigned long numOfMilis);	// time management methods
+	boolean isNotExceededTime();					//
+	unsigned long getElapsedTime();					//
 
 	void cancelProtocol(char * content, char *receiver);
-
-	void storeSentCommunicativeAct();
-	void storeReceivedCommunicativeAct();
-	void retreiveReceivedCommunicativeAct();
-
-	void startCounting(unsigned long numOfMilis);
-	boolean isNotExceededTime();
-	unsigned long getElapsedTime();
-
-	MessageStruct* parseToMessageStruct();
-	boolean createAndSendJSON();	// method that encapsulate MessageStruct data into a JSON
-	// and sends it using radio on pipe with pipe_address
-
+	
 	char id[6];
 	char sendMessageId[6];
 	char sendConversationId[6];
@@ -109,6 +103,10 @@ private:
 	bool randomId = true;
 
 	void basicMessageFill(performative performative, char *content, boolean newMsgId = true);
+	void init(RF24 *rad, RF24Network *net);
+	void sendMessage();
+	MessageStruct* parseToMessageStruct();
+	boolean createAndSendJSON();
 	
 	// measuring time connected variables and methods
 	unsigned long numberOfMilisToWait;

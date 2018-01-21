@@ -123,12 +123,6 @@ void MADuino::cancelProtocol(char * content, char *receiver)
 	sendMessage();
 }
 
-void MADuino::sendMessageAndForget()
-{
-	sendMessage();
-	deleteMessages();
-}
-
 void MADuino::deleteSentMessage()
 {
 	delete messageToBeSent;
@@ -209,18 +203,6 @@ void MADuino::storeReceivedCommunicativeAct()
 	Serial.println(receiveMessageId);
 	memcpy(receiveConversationId, messageReceived->conversationId, strlen(messageReceived->conversationId));
 	Serial.println(receiveConversationId);
-	Serial.println();
-}
-
-void MADuino::retreiveReceivedCommunicativeAct()
-{
-	Serial.println("retreiveReceivedCommAct(): ");
-	messageReceived->sender = receiveId;
-	Serial.println(messageReceived->sender);
-	messageReceived->replyWith = receiveMessageId;
-	Serial.println(messageReceived->replyWith);
-	messageReceived->conversationId = receiveConversationId;
-	Serial.println(messageReceived->conversationId);
 	Serial.println();
 }
 
