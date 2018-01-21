@@ -95,8 +95,8 @@ public:
 	encoding encoding = NOT_DEFINED;
 	language language = USER_DEFINED;
 
-	MessageStruct *messageToBeSent = nullptr;		// using Message library
-	MessageStruct *messageReceived = nullptr;		//
+	MessageStruct *messageToBeSent = nullptr;
+	MessageStruct *messageReceived = nullptr;
 
 private:
 	RF24 *radio;			// specify all radio actions for radio module
