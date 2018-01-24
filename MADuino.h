@@ -74,7 +74,7 @@ public:
 	boolean isNotExceededTime();					//
 	unsigned long getElapsedTime();					//
 
-	void cancelProtocol(char * content, char *receiver);
+	void cancelProtocol(char * content, char *receiver); // FIPA Cancel Meta-Protocol
 	
 	char id[6];
 	char sendMessageId[6];
