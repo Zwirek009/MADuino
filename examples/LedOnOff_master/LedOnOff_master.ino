@@ -27,3 +27,15 @@ void loop() {
 
 	delay(3000); // wait 3 seconds and start loop() again
 }
+
+
+
+
+
+
+
+
+
+
+
+
