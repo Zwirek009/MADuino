@@ -44,6 +44,22 @@ class MADuino
 {
 public:
 
+	char id[6];
+	char sendMessageId[6];
+	char sendConversationId[6];
+
+	char receiveId[6];
+	char receiveMessageId[6];
+	char receiveConversationId[6];
+
+	protocol protocol = NO_PROTOCOL;
+	ontology ontology = NO_ONTOLOGY;
+	encoding encoding = NOT_DEFINED;
+	language language = USER_DEFINED;
+
+	MessageStruct *messageToBeSent = nullptr;
+	MessageStruct *messageReceived = nullptr;
+
 	MADuino(RF24 *rad, RF24Network *net);	// constructor with generating random ID
 	MADuino(RF24 *rad, RF24Network *net, String agentId);	// constructor with custom ID
 	~MADuino() {}	// basic destructor
@@ -75,22 +91,6 @@ public:
 	unsigned long getElapsedTime();					//
 
 	void cancelProtocol(char * content, char *receiver); // FIPA Cancel Meta-Protocol
-	
-	char id[6];
-	char sendMessageId[6];
-	char sendConversationId[6];
-
-	char receiveId[6];
-	char receiveMessageId[6];
-	char receiveConversationId[6];
-
-	protocol protocol = NO_PROTOCOL;
-	ontology ontology = NO_ONTOLOGY;
-	encoding encoding = NOT_DEFINED;
-	language language = USER_DEFINED;
-
-	MessageStruct *messageToBeSent = nullptr;
-	MessageStruct *messageReceived = nullptr;
 
 private:
 	RF24 *radio;			// specify all radio actions for radio module
@@ -98,25 +98,26 @@ private:
 
 	const uint16_t node_id = 00;	// RF24Network node id, all MADuinos has the same as 
 									// message-flow on RF24Network logic level 
-									// is based on multicast
-	const uint8_t channel = 90;	// RF24Network default
+									// is based on multicast.
+	const uint8_t channel = 90;	// RF24Network default.
 	bool randomId = true;
 
-	void basicMessageFill(performative performative, char *content, boolean newMsgId = true);
-	void init(RF24 *rad, RF24Network *net);
-	void sendMessage();
-	MessageStruct* parseToMessageStruct();
-	boolean createAndSendJSON();
-	
 	// measuring time connected variables and methods
 	unsigned long numberOfMilisToWait;
 	unsigned long startCountingTimespan = 0;
 
 	char tempMessageId[6]; // for cancelProtocol usage
 
-	char empty = '\0';
-	char all[2] = {'*','\0'};
-	char buffer[140];
+	char empty = '\0';			// default values
+	char all[2] = {'*','\0'};	//
+	char buffer[140];	// for parsing messages
+
+	void basicMessageFill(performative performative, char *content, boolean newMsgId = true);
+	void init(RF24 *rad, RF24Network *net);
+	void sendMessage();
+	MessageStruct* parseToMessageStruct();
+	boolean createAndSendJSON();
+
 };
 
 #endif
